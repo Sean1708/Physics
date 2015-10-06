@@ -1,0 +1,87 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[l2tabu,orthodox]{nag}
+\usepackage[UKenglish]{babel}
+\usepackage{amsmath}
+
+\usepackage{tikz}
+\usepackage{circuitikz}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+\title{Review}
+\author{Sean Marshallsay}
+\date{}
+\maketitle
+
+\section{Background}
+\subsection{Theory behind materials}
+\begin{itemize}
+    \item Perovskites (BaTiO\textsubscript{3})
+    \item Composites
+    \item Hexaferrites
+\end{itemize}
+\subsection{Theory behind measurements}
+
+\begin{figure}[h]
+    \centering
+    \begin{circuitikz}
+        % TODO: rotate 90* anti-clockwise?
+        \draw (0,0) to[short] node[ground,rotate=270] {} (0,0);
+        \draw (0,0) to[sinusoidal voltage source,l^=Triangle] (3,0);
+        \draw (3,0) to[short] node[sground,rotate=90] {$X$} (4,0);
+        \draw (3,0) to[vC,l^=$C_T$] (3,-3);
+        \draw (3,-3) to[short] node[sground,rotate=90] {$Y$} (4,-3);
+        \draw (3,-3) to[C,l^=$C_S$] (3,-5);
+        \draw (3,-5) to[short] node[ground] {} (3,-5);
+    \end{circuitikz}
+    \caption{\label{f:BasicSawyerTower}
+        Basic Sawyer-Tower configuration. The voltage at $X$ is sent to the
+        x-input of an oscilloscope while the voltage at $Y$ is sent to the
+        y-input.
+    }
+\end{figure}
+
+Figure~\ref{f:BasicSawyerTower} shows the simplest Sawyer-Tower configuration.
+In this mode the voltage at $X$ is assumed to be the voltage applied to the 
+
+\begin{itemize}
+    \item Sawyer-Tower
+    \item Electrometer
+\end{itemize}
+\subsection{What measurements?}
+\begin{itemize}
+    \item Poling
+    \item Magnetoelectric Current
+    \item Magnetic Field \- Polarisation Hysteresis
+\end{itemize}
+
+\section{Literature Review}
+\begin{itemize}
+    \item Sawyer-Tower paper
+\end{itemize}
+
+\section{Objectives}
+\subsection{Tester}
+\subsection{Measurements}
+\begin{itemize}
+    \item Piezoelectrics
+    \item BaTiO\textsubscript{3}
+        \begin{itemize}
+            \item Temperature Dependence
+        \end{itemize}
+    \item PMN-PT
+        \begin{itemize}
+            \item Ferroelectric
+        \end{itemize}
+    \item PZT
+        \begin{itemize}
+            \item Composite
+        \end{itemize}
+    \item Hexaferrites
+        \begin{itemize}
+            \item Intrinsic
+        \end{itemize}
+\end{itemize}
+\end{document}
