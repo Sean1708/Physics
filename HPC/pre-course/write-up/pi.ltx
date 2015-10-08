@@ -1,0 +1,53 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[UKenglish]{babel}
+\usepackage{graphicx}
+
+\begin{document}
+\title{Pre-Course: Estimating Pi}
+\author{Exam Number: Y0071170}
+\date{}
+\maketitle
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{FullRange}
+    \caption{\label{f:full}
+        The accuracy of the estimate as the number of iterations gets large.
+        Note that both axes are a log scale.
+    }
+\end{figure}
+
+The most important factor in the accuracy of the estimate is the number of
+iterations that the algorithm is run for. Figure~\ref{f:full} shows how the
+accuracy of the estimate changes depending on the number of iterations. The
+error was calculated using the formula
+
+\[
+    Percentage Error = \left| \frac{\pi_e - M_{PI}}{M_{PI}} \cdot 100 \right|
+\]
+
+where \(\pi_e\) is the value of \(\pi\) estimated using the algorithm and
+\(M_{PI}\) is the value of M\_PI from math.h.
+
+Figure~\ref{f:full} shows that the accuracy of the estimate is continually
+increasing, even until \(10 000 000 000\) iterations which was the largest order
+of magnitude that could be run on this computer in a reasonable time.
+Figure~\ref{f:small} suggests that the accuracy has an \(e^{-N}\) dependence.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{SmallIter}
+    \caption{\label{f:small}
+        The accuracy of the estimate when the number of iterations is small.
+    }
+\end{figure}
+
+Increasing the number of iterations can only go so far, however, since \(\pi\) is
+an irrational number in binary and would therefore need an infinite number of
+bits to store. This means that there would be a point where a double could not
+store the value more accurately regardless of how many more iterations are run.
+At this point you would need a data type with a larger number of storage bits
+available, such as quad\_t. If even more accuracy was required a
+multiple-precision arithmetic library could be used, such as GNU's MPFR.
+\end{document}

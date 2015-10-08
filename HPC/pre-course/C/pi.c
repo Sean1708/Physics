@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     } else if (argc == 2) {
         long iterations = strtol(argv[1], NULL, 10);
         double pi = estimate_pi(iterations);
-        printf("pi = %lf\n", pi);
+        printf("pi = %.15lf\n", pi);
         printf("error: %le%%\n", percent_err(pi, M_PI));
     } else if (argc == 3) {
         long start = strtol(argv[1], NULL, 10);
@@ -29,11 +29,13 @@ int main(int argc, char* argv[]) {
     } else if (argc == 4) {
         long start = strtol(argv[1], NULL, 10);
         long stop = strtol(argv[2], NULL, 10);
-        FILE* output = fopen(argv[3], "w");
+        char* filename = argv[3];
+        FILE* output = fopen(filename, "w");
         if (output == NULL) {
-            printf("Error: could not open file %s", argv[3]);
+            printf("Error: could not open file %s", filename);
             return 1;
         }
+        fprintf(stderr, "Warning: cancelling with Ctrl-C will leave %s open", filename);
         calculate_estimates(start, stop, output);
         fclose(output);
     } else {
@@ -78,7 +80,7 @@ void calculate_estimates(long start, long stop, FILE* file) {
     for (long i = start; i < stop; i++) {
         double pi = estimate_pi(i);
         double err = percent_err(pi, M_PI);
-        fprintf(file, "%ld\t%lf\t%le\n", i, pi, err);
+        fprintf(file, "%ld\t%.15lf\t%le\n", i, pi, err);
 
         if (err < ma_err) {
             ma_err = err;
