@@ -11,22 +11,28 @@ void calculate_estimates(long start, long stop, FILE* file);
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        printf("main <iterations>\n");
+        char* prog_name = argv[0];
+        printf("%s <iterations>\n", prog_name);
         printf("\t- calculate pi using a set number of iterations\n");
-        printf("main <start> <stop> [output]\n");
+        printf("%s <start> <stop> [output]\n", prog_name);
         printf("\t- calculate pi for every number of iterations from start to stop\n");
         printf("\t- if output is given the results are saved to that file else they are printed to stdout\n");
         return 0;
     } else if (argc == 2) {
+        // Calculates a single estimate of pi with the given number of iterations.
         long iterations = strtol(argv[1], NULL, 10);
         double pi = estimate_pi(iterations);
         printf("pi = %.15lf\n", pi);
         printf("error: %le%%\n", percent_err(pi, M_PI));
     } else if (argc == 3) {
+        // Calculates estimates for pi using the range of iterations given,
+        // printing results to stdout.
         long start = strtol(argv[1], NULL, 10);
         long stop = strtol(argv[2], NULL, 10);
         calculate_estimates(start, stop, stdout);
     } else if (argc == 4) {
+        // Calculates estimates for pi using the range of iterations given,
+        // printing results to the given file.
         long start = strtol(argv[1], NULL, 10);
         long stop = strtol(argv[2], NULL, 10);
         char* filename = argv[3];
@@ -35,7 +41,6 @@ int main(int argc, char* argv[]) {
             printf("Error: could not open file %s", filename);
             return 1;
         }
-        fprintf(stderr, "Warning: cancelling with Ctrl-C will leave %s open", filename);
         calculate_estimates(start, stop, output);
         fclose(output);
     } else {
@@ -48,17 +53,9 @@ int main(int argc, char* argv[]) {
 
 
 double percent_err(double estimate, double actual) {
-    // The closer actual and estimate get the less accurate this value gets.
     return fabs(100*(actual - estimate)/actual);
 }
 
-// Limited by number of iterations.
-// Limited by use of double:
-//     - long double or quad_t will provide extra accuracy at a small
-//       performance loss
-//     - using a multiple-precision floating point library (such as GNU's MPFR)
-//       will provide theoretically infinite accuracy but incurs a significant
-//       penalty
 double estimate_pi(long iterations) {
     double pi = 0;
     for (long i = 0; i < iterations; i++) {
@@ -75,7 +72,8 @@ void calculate_estimates(long start, long stop, FILE* file) {
     // ma_ variables track the values at which the most accurate pi is found
     long ma_iters = 0;
     double ma_pi = 0;
-    double ma_err = INFINITY;  // this value must always be greater then the first err value
+    double ma_err = INFINITY;  // this value must always be greater than the first err value
+                               // INFINITY is guaranteed to exist in C99 and later
 
     for (long i = start; i < stop; i++) {
         double pi = estimate_pi(i);
