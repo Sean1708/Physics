@@ -28,7 +28,7 @@ error was calculated using the formula
 \]
 
 where \(\pi_e\) is the value of \(\pi\) estimated using the algorithm and
-\(M_{PI}\) is the value of M\_PI from math.h.
+\(M_{PI}\) is the value of \texttt{M\_PI} from \texttt{math.h}.
 
 Figure~\ref{f:full} shows that the accuracy of the estimate is continually
 increasing, even until \(10 000 000 000\) iterations which was the largest order
@@ -45,9 +45,9 @@ Figure~\ref{f:small} suggests that the accuracy has an \(e^{-N}\) dependence.
 
 Increasing the number of iterations can only go so far, however, since \(\pi\) is
 an irrational number in binary and would therefore need an infinite number of
-bits to store. This means that there would be a point where a double could not
+bits to store. This means that there would be a point where a \texttt{double} could not
 store the value more accurately regardless of how many more iterations are run.
 At this point you would need a data type with a larger number of storage bits
-available, such as quad\_t. If even more accuracy was required a
+available, such as \texttt{quad\_t}. If even more accuracy was required a
 multiple-precision arithmetic library could be used, such as GNU's MPFR.
 \end{document}
