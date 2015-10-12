@@ -2,7 +2,7 @@
 
 #####=== C ===#####
 
-# Object files
+# Object Files
 *.o
 *.ko
 *.obj
@@ -18,7 +18,7 @@
 *.la
 *.lo
 
-# Shared objects (inc. Windows DLLs)
+# Shared Objects (inc. Windows DLLs)
 *.dll
 *.so
 *.so.*
@@ -31,6 +31,8 @@
 *.i*86
 *.x86_64
 *.hex
+
+# Debug Files
 
 #### joe made this: http://goel.io/joe
 
