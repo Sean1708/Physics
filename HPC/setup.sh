@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# Obtain week number and nickname for project.
-read -p 'Week: ' week
+# Obtain question number and nickname for project.
+read -p 'Question: ' question
 read -p 'Name: ' name
 
-mkdir "Week$week"
-cd "Week$week"
+mkdir "Q$question"
+cd "Q$question"
 
 # C
 mkdir 'C'
@@ -45,7 +45,7 @@ echo "\\documentclass[11pt,a4paper]{article}
 \\usepackage{graphicx}
 
 \\begin{document}
-\\title{Week$week: $name}
+\\title{Question $question: $name}
 \\author{
     Sean Marshallsay\\\\
     Exam Number: Y0071170
