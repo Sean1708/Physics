@@ -44,6 +44,8 @@ echo "\\documentclass[11pt,a4paper]{article}
 \\usepackage[UKenglish]{babel}
 \\usepackage{graphicx}
 
+\\renewcommand{\\familydefault}{\\sfdefault}
+
 \\begin{document}
 \\title{Question $question: $name}
 \\author{
