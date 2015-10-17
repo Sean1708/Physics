@@ -52,6 +52,6 @@ echo "\\documentclass[11pt,a4paper]{article}
     Sean Marshallsay\\\\
     Exam Number: Y0071170
 }
-\date{}
-\maketitle
+\\date{}
+\\maketitle
 \\end{document}" > "WriteUp/${name}.ltx"
