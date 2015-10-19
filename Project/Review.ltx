@@ -4,30 +4,259 @@
 \usepackage[UKenglish]{babel}
 \usepackage{amsmath}
 
+\usepackage[style=phys]{biblatex}
+\addbibresource{project.bib}
+
 \usepackage{tikz}
 \usepackage{circuitikz}
+
+\usepackage{pdfpages}
+
+\usepackage{siunitx}
+\usepackage[version=4]{mhchem}
 
 \renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
-\title{Review}
-\author{Sean Marshallsay}
+\title{Building a Ferroelectric Tester: Project Review}
+\author{Exam Number: Y0071170}
 \date{}
 \maketitle
 
 \section{Background}
-\subsection{Theory behind materials}
-\begin{itemize}
-    \item Perovskites (BaTiO\textsubscript{3})
-    \item Composites
-    \item Hexaferrites
-\end{itemize}
-\subsection{Theory behind measurements}
+The first known example of a ferroelectric material was Rochelle salt. Rochelle
+salt was first grown in the 17\textsuperscript{th} Century by Elie
+Seignette\cite{cro87} but it wasn't until 1880 that Pierre and Paul-Jacques
+Curie showed that Rochelle salt displayed a non-linear electric response (more
+specifically piezoelectricity, in which an applied strain induces a net
+voltage).
 
-\begin{figure}[h]
+Between 1921 and 1924 Joseph Valasek and his supervisor William Swann studied
+Rochelle salt with a ballistic galvanometer as a dielectric material analogous
+to ferromagnets, showing for the first time that a hysteresis can occur in
+polarisation and coining the term ferroelectricity. They also showed that
+ferroelectricity in Rochelle salt followed a Curie-Weiss law for its
+permittivity and that there existed a Curie temperature (two Curie temperatures
+in fact)\cite{val21,val22a,val22b,val24}. In 1929 CB Sawyer and CH Tower used
+a linear capacitor connected to an oscilloscope to measure the first hysteresis
+loop of a ferroelectric capacitor\cite{saw30}.
+
+In 1945 V Ginsburg discovered ferroelectricity in barium titanate\cite{cro87}, a
+perovskite structured crystal, and between the years of 1949 and 1960 another 20
+perovskite structures were discovered. The origin of ferroelectricity in most
+perovskites is fairly simple and based mostly on their structure (though there
+are notable exceptions such as barium titanate)\cite{lin77}. Perovskites form a
+face centred cubic structure with a body centred atom like the one shown in
+figure~\ref{f:perovskite-structure}, in the case of barium titanate the face
+atoms are \ce{O^2-}, the corner atoms are \ce{Ba^2+}, and the centre atoms are
+\ce{Ti^4+}. Polarisation in a perovskite occurs when the central cation is
+displaced from the centre of the cubic structure\cite{hil00}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{PerovskiteStructure}
+    \caption{\label{f:perovskite-structure}
+        The unit cell of a perovskite structured material, specifically barium
+        titanate.
+    }
+\end{figure}
+
+When in a cubic phase perovskites display a paraelectric response because the
+electric potential that the central cation experiences becomes very large when
+it gets close to the face centred anions and has a minimum in the centre of the
+cubic structure, this limits the displacement of the central cation but means it
+is most likely to be found at the centre when under no external influence
+causing a paraelectric response as shown in figure~\ref{f:bto-room-temp}.
+However when the perovskites are in other phases the shape of the lattice
+distorts\cite{kwe93} causing two of the face centred anions to sit further from
+the centre than the other four, this means that there are two distinct minima in
+the electric potential that the centre cation experiences. The centre anion is
+equally likely to sit in either of these two spots when there is no external
+electric field. When a field is applied to the crystal the centre anion will not
+move to the centre of the perovskite structure until an electric field has been
+applied in that direction, causing ferroelectric hysteresis as shown
+figure~\ref{f:bto-cold}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{RoomTemp-Charge}
+    \caption{\label{f:bto-room-temp}
+        Paraelectric hysteresis of barium titanate.
+    }
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{AboveLiqNit-0s}
+    \caption{\label{f:bto-cold}
+        Ferroelectric hysteresis loop of barium titanate.
+    }
+\end{figure}
+
+Lead magnesium niobate-lead titanate (or PMN-PT) is another type of perovskite
+structured ferroelectric, however it does not get its ferroelectricity from
+structural changes and is therefore known as a relaxor ferroelectric. Relaxor
+ferroelectrics exist in a paraelectric phase at high temperatures but as they
+are cooled past the Burns temperature they transition into a ferroelectric
+phase. This transition, however, is not accompanied by any structural changes
+and is therefore not a structural phase transition\cite{bok06}. Instead the
+ferroelectricity of relaxor ferroelectrics is obtained from nano-scale polar
+regions which are caused by cations displacing anions\cite{bok92}. While barium
+titanate is a relaxor ferroelectric, it also obtains some ferroelectricity from
+structural changes\cite{lin77}.
+
+In 1894 Peirre Curie postulated that crystals containing certain molecules could
+be magnetised by an electric field (and vice versa). However it wasn't until
+1961 that DN Astrov measured an electrically induced magnetisation in
+\ce{Cr203}, confirming the magnetoelectric effect. Magnetoelectrics can be
+broadly classified into two types, composite magnetoelectrics and intrinsic
+magnetoelectrics\cite{kam12}.
+
+Composite magnetoelectrics consist of two different materials, one showing
+strong ferroelectricity and the other showing strong ferromagnetism. Since all
+ferromagnets display magnetostriction and all ferroelectrics display
+piezoelectricity these materials can be coupled via their strain coefficients.
+Applying an electric field strains the ferroelectric crystal in some direction
+which in turn strains the ferromagnetic crystal, changing its magnetic
+properties and in some cases switching the magnetisation. For composite
+magnetoelectrics to display a strong magnetoelectric coupling the ferroelectric
+material must display large piezoelectric properties, one such material being
+lead zirconate titanate (PZT). PZT has fourteen different polarisation
+directions allowing the domains to orientate optimally, leading to large
+piezoelectric constants and coupling factors\cite{ran98}. This coupled with
+PZT's ferroelasticity\cite{meh90} makes it a very good candidate for composite
+magnetoelectric materials.
+
+Intrinsic magnetoelectrics, on the other hand, are a single phase crystal
+meaning they consist of only one material displaying both ferroelectric and
+ferromagnetic properties\cite{kam12}. One significant group of
+intrinsic magnetoelectrics are the hexaferrites, so called because they grow
+into hexagonal crystals\cite{pul12}. Hexaferrites obtain their
+magnetoelectricity from helical spin structures, the ferroelectricity being
+supplied by the spin current and the ferromagnetism being caused by deformations
+of these structures\cite{kim05,kit10}.
+
+\section{Review}
+The first ferroelectric measurements to be performed with an entirely electronic
+device were made by CB Sawyer and CH Tower in 1929\cite{saw30}. Sawyer and Tower
+used a Braun tube oscilloscope connected to a circuit similar to the
+Sawyer-Tower circuit outlined in section~\ref{s:tester}. However the circuit
+used potential dividers to bring the voltage down to one manageable by the
+oscilloscope. Sawyer and Tower examined how the piezoelectricity of Rochelle
+salt was coupled to the ferroelectricity by comparing hysteresis curves of the
+sample when clamped by two aluminium plates (to prevent structural changes due
+to piezoelectricity) to hysteresis curves of the sample when allowed to stretch
+and strain. They found that by clamping the sample they significantly reduced
+the amount of charge that could be built up on the sample, and therefore
+changing the hysteresis loop significantly. They then went on to examine how the
+ferroelectricity was affected by temperature by examining how the shape of the
+hysteresis loop changed as the sample was cooled. They found that the voltage
+required to obtain saturation and the remanent polarisation were both increased
+as the sample cooled below room temperature.
+
+The circuit used by Sawyer and Tower does not differ significantly from the
+circuits in use today, however there are two significant differences which
+likely affected the quality of the hysteresis curves obtained. Firstly the
+circuit contained three resistors, this causes the capacitors used to have a
+non-zero time constant and therefore there is a lag when the capacitor
+discharges which can easily be mistaken for false hysteresis and makes it
+impossible to correctly quantify the hysteresis. Secondly the charge value was
+not adjusted for the value of the linear capacitor meaning that the true value
+of polarisation was not deduced.
+
+Nowadays magnetoelectric measurements are performed by one of two methods. The
+first is a charge amplifier method, this is similar to the ferroelectric methods
+used by Sawyer and Tower and is described in section~\ref{s:tester}. This method
+was used in 2003\cite{nan03} to determine the magnetoelectric properties of a
+composite magnetoelectric made up of magnetostrictive Terfenol-D (a
+\ce{Tb}-\ce{Dy}-\ce{Fe} alloy) coupled with lead zirconate titanate. The sample
+was poled along one axis using a DC magnetic field of \SI{0.3}{\tesla} an AC
+magnetic field of \SI{0.2}{\milli\tesla} was then applied to the sample at
+\SI{100}{\hertz}. Electrodes were placed on opposite sides of the sample and it
+was placed in a circuit like the one in figure~\ref{f:electrometer-circuit}
+except the signal generator was bypassed to ground and the voltage at \(X\) was
+not measured. The magnetoelectric effect was then quantified by differentiating
+the \(E\)-\(H\) hysteresis loop, this was performed with the electrodes in
+various different orientations compared to the magnetic field. They defined the
+magnetoelectric coefficient \(\alpha_E\) as in
+(\ref{e:magnetoelectric-coefficient}) where \(a\) and \(b\) refer to axes of the
+unit cell.
+
+\begin{equation}\label{e:magnetoelectric-coefficient}
+    \alpha_{Eab} = \frac{\mathrm{d}E_a}{\mathrm{d}H_b}
+\end{equation}
+
+They found that the magnetoelectric coefficient of the sample depended
+non-linearly on the bias field applied indicating a ferroic coupling between the
+magnetostrictive phase and the piezoelectric phase. They concluded that this was
+possible due to the significantly large magnetostriction and piezoelectricity of
+the Terfenol-D and PZT respectively.
+
+The second technique makes use of a lock-in amplifier to ensure that only the
+polarisation caused by a magnetic field is measured. This technique was used to
+quantify a magnetoelectric sample in reference~\cite{zha06}, though the lock-in
+was also used to measure a phase difference in the polarisation. In this
+experiment an electromagnet was used to apply a \SI{50}{\milli\tesla} DC
+magnetic field along one axis of the sample which was wrapped in a solenoid. The
+reference signal of the lock-in amplifier was used to drive a small AC magnetic
+field in the solenoid and the voltage due to polarisation of the sample was
+measured using the signal input of the lock-in amplifier. They found that the
+phase shift between the applied magnetic field and the induced electric field
+was non-zero only when the magnetic field was oscillated at the samples resonant
+frequency.
+
+A PZNT-Metglas composite magnetoelectric was quantified using a third technique
+in 2011\cite{par11}. In this setup an electromagnet was used to apply a DC
+magnetic field to the sample of \SI{6.3}{\milli\tesla}. A pair of Helmholtz
+coils were used to to provide a \SI{1}{\kilo\hertz} AC magnetic field \(H_{AC}\)
+of amplitude \SI{0.1}{\milli\tesla}. The polarisation \(P\) was measured using a
+circuit similar to the one in figure~\ref{f:saw-tow-circuit} but with the signal
+generator bypassed to ground and no voltage measured at \(X\). The polarisation
+was plotted against the applied AC magnetic field measured while the DC magnetic
+field had been applied. They also found that the two quantities had a small
+phase shift of about \SI{53}{\micro\second} which they attributed to losses
+caused by the interface between the two phases. They went on to examine the
+dependence of this phase shift on frequency of the driving magnetic field,
+finding that the phase shift increases as the frequency does which was explained
+by the diffusion of charge in the ferroelectric phase\cite{pos69}. They then
+tested the maximum polarisation as a function of the amplitude of \(H_{AC}\)
+finding that the maximum polarisation increased linearly with the amplitude.
+Finally they showed that the maximum polarisation followed the same dependence
+on \(H_{DC}\) as the magnetoelectric coefficient
+(\(\frac{\mathrm{d}E}{\mathrm{d}H}\)) did.
+
+In 2010 Y Kitagawa \textit{et al.} reported a low field magnetoelectric effect
+at room temperature in \ce{Sr3Co2Fe24O41} (a Z-type hexaferrite) ceramics
+sintered in oxygen. They characterised the magnetoelectric effect by measuring
+the magnetoelectric current and inferring other properties from that. They first
+poled the sample with a \SI{1.5}{\tesla} magnetic field and applied a
+\SI{700}{\kilo\volt\per\metre} electric field perpendicular to the magnetic
+field, they then reduced the magnetic field to \SI{0.5}{\tesla} and removed the
+electric field. These steps were used to put the sample into a paraelectric
+ferrimagnetic phase. The magnetoelectric current was then measured by sweeping
+the magnetic field from \SI{+0.5}{\tesla} to \SI{-0.5}{\tesla} while measuring
+the current from the sample using an electrometer. The polarisation was
+calculated from the magnetoelectric current by integrating over time.
+
+They found that there was no spontaneous polarisation at zero magnetic field but
+the polarisation increased as the magnetic field did, showing that the sample
+was paraelectric in nature. However they found that the polarisation peaked at
+\SI{0.2}{\tesla} and then started to reduce to zero, a behaviour not often
+associated with paraelectric samples. They then went on to show that though the
+sample was not ferroelectric in nature, it still retained information on it's
+previous polarisation state. They did this by poling the sample with either a
+positive or negative electric field, removing this field, then applying a
+positive alternating magnetic field. When they did this they found that,
+although there was no net polarisation at zero magnetic field, the polarisation
+was induced positively when poled positively or negatively when poled
+negatively.
+
+\section{Theory}
+\subsection{Tester}\label{s:tester}
+
+\begin{figure}[ht]
     \centering
     \begin{circuitikz}
-        % TODO: rotate 90* anti-clockwise?
         \draw (0,0) to[short] node[ground,rotate=270] {} (0,0);
         \draw (0,0) to[sinusoidal voltage source,l^=Triangle] (3,0);
         \draw (3,0) to[short] node[sground,rotate=90] {$X$} (4,0);
@@ -36,52 +265,224 @@
         \draw (3,-3) to[C,l^=$C_S$] (3,-5);
         \draw (3,-5) to[short] node[ground] {} (3,-5);
     \end{circuitikz}
-    \caption{\label{f:BasicSawyerTower}
-        Basic Sawyer-Tower configuration. The voltage at $X$ is sent to the
-        x-input of an oscilloscope while the voltage at $Y$ is sent to the
+    \caption{\label{f:saw-tow-circuit}
+        Basic Sawyer-Tower configuration. The voltage at \(X\) is sent to the
+        x-input of an oscilloscope while the voltage at \(Y\) is sent to the
         y-input.
     }
 \end{figure}
 
-Figure~\ref{f:BasicSawyerTower} shows the simplest Sawyer-Tower configuration.
-In this mode the voltage at $X$ is assumed to be the voltage applied to the 
+The most basic form of ferroelectric tester (the Sawyer-Tower
+circuit\cite{saw30}) is shown in figure~\ref{f:saw-tow-circuit}. The circuit is
+driven by an alternating voltage (this is usually a triangle wave so that the
+points on the hysteresis graph are equally spaced) which is also sent to the
+x-input of an oscilloscope. From Kirchhoff's Current Law the current at every
+point in the circuit is equal meaning that both the test capacitor \(C_T\) and
+the sense capacitor \(C_S\) will have the same charge \(Q\) built up on them at
+any given time. The charge on a capacitor is given by (\ref{e:qcv}) so the charge
+on the test capacitor \(Q_T\) can be measured by measuring the voltage across
+the sense capacitor \(V_S\) and applying (\ref{e:qcvcv}).
+When this voltage is sent to the y-input of the oscilloscope a hysteresis loop
+is generated where the x-axis is the voltage applied to the test capacitor and
+the y-axis is equal to \(\frac{Q_T}{C_S}\).
 
-\begin{itemize}
-    \item Sawyer-Tower
-    \item Electrometer
-\end{itemize}
-\subsection{What measurements?}
-\begin{itemize}
-    \item Poling
-    \item Magnetoelectric Current
-    \item Magnetic Field \- Polarisation Hysteresis
-\end{itemize}
+\begin{equation}\label{e:qcv}
+    Q = C V
+\end{equation}
+\begin{equation}\label{e:qcvcv}
+    Q_T = C_T V_T = C_S V_S = Q_S
+\end{equation}
 
-\section{Literature Review}
-\begin{itemize}
-    \item Sawyer-Tower paper
-\end{itemize}
+This setup is simply a voltage divider so the voltage sent to the x-input is not
+actually the voltage applied to the test capacitor, it is actually the total
+voltage applied to the circuit. For this reason the voltage drop across the
+sense capacitor must be negligible compared to the voltage drop across the test
+capacitor. This is achieved by using a sense capacitor with a capacitance much
+greater than the capacitance of the test capacitor. However if the sense
+capacitor is too large then the measured voltage will be small causing a low
+signal-to-noise ratio. The literature suggests that the sense capacitor should
+be about 10 times larger than the test capacitor.
+
+
+% TODO: circuitikz this!!
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{ElectrometerCircuit}
+    \caption{\label{f:electrometer-circuit}
+        An electrometer based ferroelectric tester, the voltage at \(Y\) at any
+        given time is directly proportional to the charge on the test capacitor.
+    }
+\end{figure}
+% \begin{figure}[ht]
+%     \centering
+%     \begin{circuitikz}
+%         \draw (0,0) to[short] node[ground,rotate=270] {} (0,0);
+%         \draw (0,0) to[sinusoidal voltage source,l^=Triangle] (3,0);
+%         \draw (3,0) to[short] node[sground,rotate=90] {$X$} (4,0);
+%         \draw (3,0) to[vC,l^=$C_T$] (3,-3);
+%         % \draw (3,-3) to[short] node[sground,rotate=90] {$Y$} (4,-3);
+%         % \draw (3,-3) to[C,l^=$C_S$] (3,-5);
+%         % \draw (3,-5) to[short] node[ground] {} (3,-5);
+%     \end{circuitikz}
+%     \caption{\label{f:electrometer-circuit}
+%         An electrometer based ferroelectric tester, the voltage at \(Y\) at any
+%         given time is directly proportional to the charge on the test capacitor.
+%     }
+% \end{figure}
+
+An alternative ferroelectric tester circuit based on an electrometer is shown in
+figure~\ref{f:electrometer-circuit}. This can be thought to operate in the same
+manner as the circuit in figure~\ref{f:saw-tow-circuit}, in fact when the
+resistor \(R\) is sufficiently large there is a negligible current lost to it and
+the two circuits become equivalent. Another way to understand the circuit in
+figure~\ref{f:electrometer-circuit} is by viewing it as a transimpedance
+amplifier integrating over the current leaving the test capacitor (which due to
+Kirchhoff's Current Law is equal to the current entering the test capacitor) and
+therefore measuring the charge built up on the capacitor. From (\ref{e:qcv})
+the polarisation of the sample can be deduced.
+
+These circuits are designed to measure the polarisation of a ferroelectric
+sample that is being driven by an alternating voltage. However by bypassing the
+signal generator and instead connecting the sample to ground, the spontaneous
+change in polarisation (caused by external stimuli such as stress) can be
+measured. This works because ground can act both as a source and sink for charge
+so as the polarisation changes charge can freely flow onto or off of the sample
+to maintain a net zero field within the sample. This causes charge to flow onto
+or off of the sense capacitor which induces a voltage across it of
+\(V_S = \frac{Q_T}{C_S}\).
+
+\subsection{Measurements}\label{s:measurements}
+There are several measurements that can be used to observe and quantify the
+magnetoelectric effect.
+
+Magnetoelectric coupling hysteresis can be performed by applying an alternating
+magnetic field to the sample while measuring the induced polarisation. The
+magnetic field can be applied by supplying a known alternating current to an
+electromagnet, since the magnetic field is linearly proportional to the current
+the magnetic field can also be known. The polarisation of the sample can then be
+measured using the devices and techniques outlined in section~\ref{s:tester},
+with the signal generator bypassed to ground. If the polarisation of some sample
+is affected by applying a magnetic field then there must exist some level of
+coupling between the magnetic and electric components of the material. From
+Maxwell's Equations it is known that a changing magnetic field will induce a
+constant potential difference in a circuit, this can manifest itself as an
+offset on a \(P\)-\(H\) loop which is easily checked by examining the dependence
+of the offset on the rate of change of the magnetic field.
+
+Another test which can be performed is to pole the sample with a positive
+magnetic field and perform an electric hysteresis (\(P\)-\(V\)) loop then pole
+the sample with a negative magnetic field and perform an electric hysteresis
+loop. These two loops can be compared to see how the magnetic field affects the
+polarisation of the sample. This measurement can also be performed by poling
+with an electric field and sweeping a magnetic field. This measurement is useful
+to understand how the performance of the sample changes under certain
+conditions.
+
+Another measurement can be made which makes use of a lock-in amplifier,
+significantly increasing signal to noise ratio and allowing a very small
+magnetoelectric effect to be measured. In this technique a small AC voltage is
+used as the reference to a lock-in amplifier and is also used to drive a
+Helmholtz coil. The Helmholtz coil applies a small AC magnetic field to the
+sample, inducing a small AC voltage between the electrodes on the sample which
+is used as the signal for the lock-in. An electromagnet used to apply a large
+magnetic field to the sample which is then swept in a low frequency loop
+allowing a hysteresis loop to be measured.
+
+When a sample is polarised charge builds up on the electrodes to cancel the
+internal electric field caused by the polarisation so that there is a net zero
+electric field. When the polarisation is changed the electric field becomes
+non-zero, causing a current to flow. When the polarisation is changed by
+applying a magnetic field, this is known as the magnetoelectric current. The
+magnetoelectric current is a direct consequence of the coupling between the
+electric and magnetic components of the sample and is often characteristic of
+the sample material. In certain samples the magnetoelectric current will be
+negligibly large when the sample is poled and swept along a single axis, this is
+common in samples which are strain coupled as the axis will only strain
+positively regardless of whether the field is positive or negative. In these
+cases the sample can be poled with a magnetic field, then the field can be
+reduced to zero after which the sample can be rotated 90 degrees and the field
+swept in one direction. This causes the axis along which the current is measured
+to be strained negatively at first then positively which can lead to a larger
+change in the polarisation and therefore a larger magnetoelectric current.
 
 \section{Objectives}
-\subsection{Tester}
-\subsection{Measurements}
-\begin{itemize}
-    \item Piezoelectrics
-    \item BaTiO\textsubscript{3}
-        \begin{itemize}
-            \item Temperature Dependence
-        \end{itemize}
-    \item PMN-PT
-        \begin{itemize}
-            \item Ferroelectric
-        \end{itemize}
-    \item PZT
-        \begin{itemize}
-            \item Composite
-        \end{itemize}
-    \item Hexaferrites
-        \begin{itemize}
-            \item Intrinsic
-        \end{itemize}
-\end{itemize}
+The initial aim of this project is to design a circuit capable of detecting the
+presence of ferroelectric hysteresis. This will be done using a technique
+similar to a Sawyer-Tower circuit, although possibly using an electrometer based
+design, which was explained previously. Once this has been done the device will
+be used to make characteristic measurements on several samples that have been
+acquired.
+
+The first step in testing would be to take hysteresis loops of linear
+capacitors. Since many modern linear capacitors are actually compensated
+non-linear capacitors care must be taken to find truly linear capacitors, such
+as ones made using biaxially-oriented polyethylene terephthalate film (commonly
+known as PET or Mylar capacitors). By rearranging (\ref{e:qcvcv}) it can be seen
+that the hysteresis loops of these capacitors should show up as straight lines
+with the gradient \(\frac{C_T}{C_S}\), which can be checked using a multimeter
+to measure \(C_T\) and \(C_S\). This method could also be used to calibrate the
+device by seeing what the percentage error is on a range of differently valued
+linear capacitors.
+
+Another interesting avenue to explore would be using the device to examine
+common non-linear circuit elements, such as piezoelectric buzzers, or complex
+circuits containing linear components which might give the appearance of
+containing non-linear components, such as a resistor and capacitor (which would
+cause the capacitor to have a non-zero discharge time). These situations may
+come up when performing measurements later in the year so it would be useful to
+be able to recognise and characterise the effects.
+
+A ferroelectric barium titanate sample has been procured which has a low
+switching voltage (\SI{40}{\volt}), this will be primarily used to test the
+operation of the device. However barium titanate has some interesting
+temperature dependent properties itself, at temperatures of about
+\SI{400}{\kelvin} or higher it is in a cubic paraelectric phase but as it cools
+it passes through 3 distinct ferroelectric phases\cite{kwe93,hay02,ish97}.
+Liquid nitrogen can be used to cool the sample so that the dependence of
+hysteresis on the temperature can be examined. Unfortunately, due to the large
+temperature gradient between liquid nitrogen and the surrounding environment, it
+is difficult to control the temperature of the sample with liquid nitrogen. On
+method to remedy this would be to constantly measure the temperature of the
+sample and take a hysteresis loop at certain temperatures, an issue arises here
+in that the temperature will likely be changing quickly and therefore the error
+on temperature will be large and if the sample is very sensitive to temperature
+the hysteresis loop may be significantly distorted. Another method would be to
+use a device that is specifically designed to control temperatures, such as a
+Peltier cooler, allowing the temperature of the device to be set at a constant
+temperature. The disadvantage of this would be that the temperature range is
+often limited on devices like these and therefore only a limited section of
+temperature dependence could be examined.
+
+There is also a ferroelectric lead magnesium niobate-lead titanate (PMN-PT)
+sample available which has a higher switching voltage (\SI{150}{\volt}), this
+will be useful for testing the device at the high voltages which might be needed
+when performing measurements on later samples. PMN-PT also has a very large
+piezoelectric response\cite{nag00} which means that it might have a strong
+frequency dependence, causing the hysteresis loop to change with frequency and
+maybe even causing complex hysteresis shapes (such as wasp-waisted or reflective
+hysteresis).
+
+The first magnetoelectric sample to be tested will be a composite
+magnetoelectric of lead zirconate titanate. This sample is suspected to have a
+high switching voltage so will require the device to handle high
+(\SI{200}{\volt}) voltages if it is to be driven with electric fields. If the
+device is not capable of handling voltages this high it may be possible to drive
+it only with magnetic fields. This sample will undergo all measurements
+described in section~\ref{s:measurements}. First the sample will be poled with a
+various strengths and orientations of magnetic field and the electric hysteresis
+loops in each of these cases will be compared, this should confirm that the
+sample does have some magnetoelectric dependence. Then a magnetic field will be
+used to drive electric hysteresis, this may not be possible if the
+magnetoelectric coupling is weak or the magnetic material is not piezomagnetic.
+And finally the magnetoelectric current will be found, giving a measure of the
+magnetoelectric coupling.
+
+The final samples that will be tested are hexaferrite samples, being grown by
+pulsed laser deposition at the University of York. These samples are intrinsic
+magnetoelectric samples and will undergo the same procedures as the lead
+zirconate titanate samples.
+
+{\printbibliography}
+
+\includepdf[pages=-]{Timetable.pdf}
 \end{document}
