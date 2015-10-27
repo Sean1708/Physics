@@ -9,12 +9,14 @@ cd "Q$question"
 
 # C
 mkdir 'C'
-echo "CFLAGS = -Weverything -Os
+echo "CFLAGS = -Weverything
 
 debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter
-debug: release
+debug: all
 
-release: $name
+release: CFLAGS += -Ofast
+
+all: $name
 
 $name: ${name}.c
 
