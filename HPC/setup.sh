@@ -48,10 +48,7 @@ echo "\\documentclass[11pt,a4paper]{article}
 
 \\begin{document}
 \\title{Question $question: $name}
-\\author{
-    Sean Marshallsay\\\\
-    Exam Number: Y0071170
-}
+\\author{Sean Marshallsay: sm1183}
 \\date{}
 \\maketitle
-\\end{document}" > "WriteUp/${name}.ltx"
+\\end{document}" > "WriteUp/Q${question}_sm1183.ltx"
