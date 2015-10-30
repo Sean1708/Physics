@@ -9,7 +9,7 @@ cd "Q$question"
 
 # C
 mkdir 'C'
-echo "CFLAGS = -Weverything
+echo "CFLAGS = -Weverything --std=c11
 
 debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter
 debug: all
