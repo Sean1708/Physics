@@ -11,10 +11,10 @@ cd "Q$question"
 mkdir 'C'
 echo "CFLAGS = -Weverything --std=c11
 
-debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter
+debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter -O0
 debug: all
 
-release: CFLAGS += -Ofast -DNDEBUG
+release: CFLAGS += -DNDEBUG -O3
 
 all: $name
 
