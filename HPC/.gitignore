@@ -33,6 +33,7 @@
 *.hex
 
 # Debug Files
+*.DSYM
 
 #### joe made this: http://goel.io/joe
 
