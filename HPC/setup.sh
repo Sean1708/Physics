@@ -15,6 +15,7 @@ debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter -O0
 debug: all
 
 release: CFLAGS += -DNDEBUG -O3
+release: all
 
 all: $name
 
