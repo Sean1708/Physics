@@ -29,7 +29,6 @@ double accel[nparts][ndim];
 double PE;
 double KE;
 
-// TODO: static inline!
 double min(double a, double b)
 {
   if( a < b )
@@ -98,24 +97,19 @@ void init()
   }
 }
 
-// TODO: this is a constant already isn't it?
 const double pi_2 = M_PI/2.0;
 
-// TODO: static inline!
 /* Potential of each particle */
 double v(double x){
-  // TODO: floating point optimisations!
-  //     - don't use pow
-  return pow(sin(min(x, pi_2)),2);
+  double sin_min = sin(min(x, pi_2));
+  return sin_min*sin_min;
 }
 
-// TODO: static inline!
 /* Derivative of potential function */
 double dv(double x){
-  // TODO: floating point optimisations!
-  //     - dont' calculate sin and cos
-  //     - use a+a rather than 2*a
-  return 2.0*sin(min(x,pi_2))*cos(min(x,pi_2));
+  double x_pi_min = min(x,pi_2);
+  double sin_cos = sin(x_pi_min)*cos(x_pi_min);
+  return sin_cos+sin_cos;
 }
 
 /*  ***************************************************************************
@@ -160,11 +154,12 @@ void compute()
   /* For each particle: */
   for(i=0 ; i < nparts ; i++)
   {
-    /* Initialise forces to zero */
     for(k=0 ; k < ndim ; k++)
     {
-      // TODO: memset?
+      /* Initialise forces to zero */
       force[i][k] = 0.0;
+      /* compute kinetic energy */
+      KE = KE + vel[i][k]*vel[i][k];
     }
 
     /* Loop over all other particles */
@@ -174,17 +169,12 @@ void compute()
       if( i != j )
       {
         /* d2 as the squared distance between the particles */
-        for(k=0 ; k < ndim ; k++)
-        {
-          rij[k] = pos[i][k] - pos[j][k];
-        }
-
         d2 = 0;
         for(k=0 ; k < ndim ; k++)
         {
+          rij[k] = pos[i][k] - pos[j][k];
           d2 += rij[k]*rij[k];
         }
-        // TODO: do we need this sqrt()?
         d = sqrt(d2);
 
         /* attribute half of the potential energy to particle 'j'*/
@@ -193,15 +183,9 @@ void compute()
         /* Update the force on particle i*/
         for(k=0 ; k < ndim ; k++)
         {
-          // TODO: do we need the divide?
           force[i][k] = force[i][k] - rij[k]*dv(d)/d;
         }
       }
-    }
-    /* compute kinetic energy */
-    for(k=0 ; k < ndim ; k++)
-    {
-      KE = KE + vel[i][k]*vel[i][k];
     }
   }
   KE = KE * 0.5 * mass;

@@ -10,4 +10,123 @@
 \author{Sean Marshallsay: sm1183}
 \date{}
 \maketitle
+
+The \texttt{simple\_md.c} program was compiled with no optimisations and timed
+five times with the C-Shell \texttt{time} command, the timings were:
+\begin{verbatim}
+68.515u 0.178s 1:08.83 99.7%    0+0k 0+3io 0pf+0w
+69.940u 0.151s 1:10.18 99.8%    0+0k 0+4io 0pf+0w
+68.186u 0.105s 1:08.34 99.9%    0+0k 0+5io 0pf+0w
+69.129u 0.156s 1:09.39 99.8%    0+0k 0+4io 0pf+0w
+64.415u 0.023s 1:04.44 99.9%    0+0k 0+3io 0pf+0w
+\end{verbatim}
+and the results were:
+\begin{verbatim}
+PE    KE    Error
+49854482.95817039161920547485    0.00000000000000000000    0.00000000000000000000
+49854482.95817039161920547485    0.00243672236278765072    0.00000000004887664439
+\end{verbatim}
+
+The same was done with compiler optimisations on:
+\begin{verbatim}
+12.341u 0.013s 0:12.36 99.9%    0+0k 0+1io 0pf+0w
+12.396u 0.012s 0:12.41 99.9%    0+0k 0+4io 0pf+0w
+11.978u 0.008s 0:11.99 99.8%    0+0k 0+1io 0pf+0w
+12.038u 0.006s 0:12.04 99.9%    0+0k 0+4io 0pf+0w
+12.068u 0.007s 0:12.08 99.8%    0+0k 0+1io 0pf+0w
+PE    KE    Error
+49854482.95817039161920547485    0.00000000000000000000    0.00000000000000000000
+49854482.95817039161920547485    0.00243672236278765072    0.00000000004887664439
+\end{verbatim}
+
+The optimised version runs in about a sixth of the time and often uses fewer
+blocks of IO\@. Both versions of the program have almost complete CPU utilisation
+so the speed-ups are due to optimisations in the code (rather than other a
+smaller load on the CPU). Both versions also gave identical results.
+
+Running \texttt{gprof} on the unoptimised version showed that \~60\% of the
+runtime was spent in the \texttt{compute()} function, of this over half the
+runtime was spent in \texttt{dv()} and \texttt{v()}. \texttt{v()} was changed to
+avoid calling \texttt{pow()} as follows:
+\begin{verbatim}
+double v(double x){
+  double sin_min = sin(min(x, pi_2));
+  return sin_min*sin_min;
+}
+\end{verbatim}
+This reduced the runtime of the unoptimised version to about 65 seconds but had
+no affect on the optimised version. \texttt{dv()} was then changed to use an
+addition instead of multiplication by two:
+\begin{verbatim}
+double dv(double x){
+  double sin_cos = sin(min(x,pi_2))*cos(min(x,pi_2));
+  return sin_cos+sin_cos;
+}
+\end{verbatim}
+This had little effect on the runtime, however it was noticed that \texttt{min()}
+was taking up 25\% of the total runtime and accounted for the majority of the time
+spent in \texttt{dv()} so \texttt{dv()} was changed to only call \texttt{min()}
+once:
+\begin{verbatim}
+double dv(double x){
+  double x_pi_min = min(x,pi_2);
+  double sin_cos = sin(x_pi_min)*cos(x_pi_min);
+  return sin_cos+sin_cos;
+}
+\end{verbatim}
+This reduced the runtime of the unoptimised version to about 58 seconds but
+again had no effect on the optimised version. The results after these changes
+were unchanged:
+\begin{verbatim}
+PE    KE    Error
+49854482.95817039161920547485    0.00000000000000000000    0.00000000000000000000
+49854482.95817039161920547485    0.00243672236278765072    0.00000000004887664439
+\end{verbatim}
+
+The program was profiled again after these changes. The amount of time spent in
+\texttt{min()} had been reduced to about 18\% but \texttt{compute()} still
+dominated the runtime (about 68\%). Within compute the two following loops were
+independent of eachother:
+\begin{verbatim}
+/* d2 as the squared distance between the particles */
+for(k=0 ; k < ndim ; k++)
+{
+    rij[k] = pos[i][k] - pos[j][k];
+}
+
+d2 = 0;
+for(k=0 ; k < ndim ; k++)
+{
+    d2 += rij[k]*rij[k];
+}
+d = sqrt(d2);
+\end{verbatim}
+so they were merged into one loop with no change in results:
+\begin{verbatim}
+/* d2 as the squared distance between the particles */
+d2 = 0;
+for(k=0 ; k < ndim ; k++)
+{
+    rij[k] = pos[i][k] - pos[j][k];
+    d2 += rij[k]*rij[k];
+}
+d = sqrt(d2);
+\end{verbatim}
+
+Similarly the loop to calculate the kinetic energy was put into the loop which
+initialises \texttt{rij} since \texttt{vel} is not updated anywhere in the
+function:
+\begin{verbatim}
+for(k=0 ; k < ndim ; k++)
+{
+    /* Initialise forces to zero */
+    force[i][k] = 0.0;
+    /* compute kinetic energy */
+    KE = KE + vel[i][k]*vel[i][k];
+}
+\end{verbatim}
+This had no effect on the runtime of either version.
+
+
+
 \end{document}

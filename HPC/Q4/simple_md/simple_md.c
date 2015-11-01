@@ -14,9 +14,9 @@ int main(void)
 
   init();
   compute();
-  
+
   Etot = PE + KE;
-  
+
   log_file = fopen("simple_md.log", "w");
   if ( log_file == NULL )
   {
@@ -26,7 +26,7 @@ int main(void)
 
   fprintf(log_file, "PE\tKE\tError\n");
 
-  // TODO: don't keep closing and opening the log file.
+  /* TODO: don't keep closing and opening the log file. */
   fclose(log_file);
 
   for(i=0 ; i < nsteps ; i++)
