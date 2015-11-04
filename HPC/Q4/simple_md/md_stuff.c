@@ -107,7 +107,7 @@ double v(double x){
 
 /* Derivative of potential function */
 double dv(double x){
-  double x_pi_min = min(x,pi_2);
+  double x_pi_min = min(x, pi_2);
   double sin_cos = sin(x_pi_min)*cos(x_pi_min);
   return sin_cos+sin_cos;
 }
@@ -147,6 +147,7 @@ void compute()
   int i,j,k;
   double rij[ndim];
   double d, d2;
+  double dvd;
 
   PE = 0;
   KE = 0;
@@ -180,7 +181,7 @@ void compute()
         /* attribute half of the potential energy to particle 'j'*/
         PE = PE + 0.5*v(d);
 
-        double dvd = dv(d)/d;
+        dvd = dv(d)/d;
         /* Update the force on particle i*/
         for(k=0 ; k < ndim ; k++)
         {
