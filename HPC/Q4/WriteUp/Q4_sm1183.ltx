@@ -127,6 +127,26 @@ for(k=0 ; k < ndim ; k++)
 \end{verbatim}
 This had no effect on the runtime of either version.
 
+The \texttt{dv(d)/d} calculation was being run three times for every inner loop,
+so this was moved outside the inner loop from:
+\begin{verbatim}
+/* Update the force on particle i*/
+for(k=0 ; k < ndim ; k++)
+{
+    force[i][k] = force[i][k] - rij[k]*dv(d)/d;
+}
+\end{verbatim}
+To:
+\begin{verbatim}
+double dvd = dv(d)/d;
+/* Update the force on particle i*/
+for(k=0 ; k < ndim ; k++)
+{
+    force[i][k] = force[i][k] - rij[k]*dvd;
+}
+\end{verbatim}
+The unoptimised version now runs in about 30 seconds but there was no change in
+the runtime of the optimised version.
 
 
 \end{document}

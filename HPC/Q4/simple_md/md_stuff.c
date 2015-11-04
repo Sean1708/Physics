@@ -180,10 +180,11 @@ void compute()
         /* attribute half of the potential energy to particle 'j'*/
         PE = PE + 0.5*v(d);
 
+        double dvd = dv(d)/d;
         /* Update the force on particle i*/
         for(k=0 ; k < ndim ; k++)
         {
-          force[i][k] = force[i][k] - rij[k]*dv(d)/d;
+          force[i][k] = force[i][k] - rij[k]*dvd;
         }
       }
     }
