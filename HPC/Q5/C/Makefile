@@ -8,7 +8,7 @@ release: all
 
 all: matmul
 
-matmul: matmul.c
+matmul: matmul.c matrix.c
 
 .PHONY: clean
 clean:
