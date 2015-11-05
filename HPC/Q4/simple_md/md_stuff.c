@@ -171,11 +171,12 @@ void compute()
       {
         /* d2 as the squared distance between the particles */
         d2 = 0;
-        for(k=0 ; k < ndim ; k++)
-        {
-          rij[k] = pos[i][k] - pos[j][k];
-          d2 += rij[k]*rij[k];
-        }
+        rij[0] = pos[i][0] - pos[j][0];
+        d2 += rij[0]*rij[0];
+        rij[1] = pos[i][1] - pos[j][1];
+        d2 += rij[1]*rij[1];
+        rij[2] = pos[i][2] - pos[j][2];
+        d2 += rij[2]*rij[2];
         d = sqrt(d2);
 
         /* attribute half of the potential energy to particle 'j'*/
@@ -183,10 +184,9 @@ void compute()
 
         dvd = dv(d)/d;
         /* Update the force on particle i*/
-        for(k=0 ; k < ndim ; k++)
-        {
-          force[i][k] = force[i][k] - rij[k]*dvd;
-        }
+        force[i][0] = force[i][0] - rij[0]*dvd;
+        force[i][1] = force[i][1] - rij[1]*dvd;
+        force[i][2] = force[i][2] - rij[2]*dvd;
       }
     }
   }

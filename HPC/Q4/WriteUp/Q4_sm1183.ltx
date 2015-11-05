@@ -148,5 +148,40 @@ for(k=0 ; k < ndim ; k++)
 The unoptimised version now runs in about 30 seconds but there was no change in
 the runtime of the optimised version.
 
+The value that \texttt{k} takes in the inner-most loops of \texttt{compute()} is
+always 3 so these loops were unrolled from:
+\begin{verbatim}
+d2 = 0;
+for(k=0 ; k < ndim ; k++)
+{
+    rij[k] = pos[i][k] - pos[j][k];
+    d2 += rij[k]*rij[k];
+}
+d = sqrt(d2);
+\end{verbatim}
+and
+\begin{verbatim}
+for(k=0 ; k < ndim ; k++)
+{
+    force[i][k] = force[i][k] - rij[k]*dvd;
+}
+\end{verbatim}
+To:
+\begin{verbatim}
+d2 = 0;
+rij[0] = pos[i][0] - pos[j][0];
+d2 += rij[0]*rij[0];
+rij[1] = pos[i][1] - pos[j][1];
+d2 += rij[1]*rij[1];
+rij[2] = pos[i][2] - pos[j][2];
+d2 += rij[2]*rij[2];
+d = sqrt(d2);
+\end{verbatim}
+and
+\begin{verbatim}
+force[i][0] = force[i][0] - rij[0]*dvd;
+force[i][1] = force[i][1] - rij[1]*dvd;
+force[i][2] = force[i][2] - rij[2]*dvd;
+\end{verbatim}
 
 \end{document}
