@@ -1,10 +1,12 @@
-CFLAGS = -Weverything --std=c11 -lblas
+CFLAGS = -lblas
 
-debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter -O0
-debug: all
+macbook: CFLAGS += -Weverything --std=c11 -O3
+macbook: LDFLAGS ?= -L/usr/local/opt/openblas/lib
+macbook: CPPFLAGS ?= -I/usr/local/opt/openblas/include
+macbook: all
 
-release: CFLAGS += -DNDEBUG -O3
-release: all
+jorvik: CFLAGS += -Wall -Wextra -pedantic -std=c11 -O3
+jorvik: all
 
 all: matmul
 
