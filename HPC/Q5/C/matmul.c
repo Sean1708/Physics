@@ -1,6 +1,10 @@
 // Compiled On:
 //   Darwin (x86_64-apple-darwin15.0.0)
 //   Intel(R) Core(TM) i7-2635QM CPU @ 2.00GHz
+//   hw.l1icachesize: 32768
+//   hw.l1dcachesize: 32768
+//   hw.l2cachesize: 262144
+//   hw.l3cachesize: 6291456
 // With:
 //   Apple LLVM version 7.0.0 (clang-700.1.76)
 //   Target: x86_64-apple-darwin15.0.0
