@@ -1,0 +1,40 @@
+Timing 100x100 matrix...
+For a 100x100 matrix the algorithms took:
+	 Std F77: 0.001558s
+	Fast F77: 0.000446s
+	    BLAS: 0.000134s
+Timing 128x128 matrix...
+For a 128x128 matrix the algorithms took:
+	 Std F77: 0.003956s
+	Fast F77: 0.001532s
+	    BLAS: 0.000535s
+Timing 250x250 matrix...
+For a 250x250 matrix the algorithms took:
+	 Std F77: 0.024796s
+	Fast F77: 0.007407s
+	    BLAS: 0.003179s
+Timing 256x256 matrix...
+For a 256x256 matrix the algorithms took:
+	 Std F77: 0.031855s
+	Fast F77: 0.008128s
+	    BLAS: 0.004318s
+Timing 500x500 matrix...
+For a 500x500 matrix the algorithms took:
+	 Std F77: 0.208205s
+	Fast F77: 0.059028s
+	    BLAS: 0.033379s
+Timing 512x512 matrix...
+For a 512x512 matrix the algorithms took:
+	 Std F77: 0.260150s
+	Fast F77: 0.064821s
+	    BLAS: 0.033892s
+Timing 1000x1000 matrix...
+For a 1000x1000 matrix the algorithms took:
+	 Std F77: 9.493743s
+	Fast F77: 0.683990s
+	    BLAS: 0.231996s
+Timing 1024x1024 matrix...
+For a 1024x1024 matrix the algorithms took:
+	 Std F77: 10.102826s
+	Fast F77: 0.722896s
+	    BLAS: 0.287905s

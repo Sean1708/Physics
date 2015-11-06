@@ -1,6 +1,14 @@
-// Required for glibc to use [s/d]rand48.
-// #define _XOPEN_SOURCE
-
+// Compiled On:
+//   Darwin (x86_64-apple-darwin15.0.0)
+//   Intel(R) Core(TM) i7-2635QM CPU @ 2.00GHz
+// With:
+//   Apple LLVM version 7.0.0 (clang-700.1.76)
+//   Target: x86_64-apple-darwin15.0.0
+//   Thread model: posix
+// Using:
+//   clang -Weverything --std=c11 -lblas -DNDEBUG -O3  matmul.c matrix.c   -o matmul
+// BLAS Version:
+//   OpenBLAS 0.2.15
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -42,8 +50,8 @@ void check_matrix_multiplication(size_t N, double tol);
 //     prints the results of the three algorithms to stdout before checking that
 //     the three result matrices are equal to within tol.
 //
-//     The matrices are printed to stdout while the results are printed to
-//     stderr. This is so that large matrices can be checked using
+//     The matrices are printed to stdout while a confirmation of the checks is
+//     printed to stderr. This is so that large matrices can be checked using
 //
 //         $ matmul 1000 0.01 > /dev/null
 int main(int argc, char* argv[]) {
