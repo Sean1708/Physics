@@ -42,6 +42,11 @@ void check_matrix_multiplication(size_t N, double tol);
 //     Fills two NxN matrices with random numbers, prints them to stdout then
 //     prints the results of the three algorithms to stdout before checking that
 //     the three result matrices are equal to within tol.
+//
+//     The matrices are printed to stdout while the results are printed to
+//     stderr. This is so that large matrices can be checked using
+//
+//         $ matmul 1000 0.01 > /dev/null
 int main(int argc, char* argv[]) {
     // Seed once for entire program.
     srand48((long)time(NULL));
@@ -174,27 +179,27 @@ void check_matrix_multiplication(size_t N, double tol) {
     matrix_print(rhs);
     printf("\n");
 
-    printf("Testing Std F77...\n");
+    fprintf(stderr, "Testing Std F77...\n");
     matrix_multiply_stdf77(lhs, rhs, stdf77);
     printf("Result:\n");
     matrix_print(stdf77);
     printf("\n");
 
-    printf("Testing Fast F77...\n");
+    fprintf(stderr, "Testing Fast F77...\n");
     matrix_multiply_fastf77(lhs, rhs, fastf77);
     printf("Result:\n");
     matrix_print(fastf77);
     printf("\n");
 
-    printf("Testing BLAS...\n");
+    fprintf(stderr, "Testing BLAS...\n");
     matrix_multiply_blas(lhs, rhs, blas);
     printf("Result:\n");
     matrix_print(blas);
     printf("\n");
 
-    printf("Std F77 == Fast F77?\t%s\n", matrix_equals(stdf77, fastf77, tol) ? "yes" : "no");
-    printf("Std F77 == BLAS?\t%s\n", matrix_equals(stdf77, blas, tol) ? "yes" : "no");
-    printf("Fast F77 == BLAS?\t%s\n", matrix_equals(fastf77, blas, tol) ? "yes" : "no");
+    fprintf(stderr, "Std F77 == Fast F77?\t%s\n", matrix_equals(stdf77, fastf77, tol) ? "yes" : "no");
+    fprintf(stderr, "Std F77 == BLAS?\t%s\n", matrix_equals(stdf77, blas, tol) ? "yes" : "no");
+    fprintf(stderr, "Fast F77 == BLAS?\t%s\n", matrix_equals(fastf77, blas, tol) ? "yes" : "no");
 
     matrix_destroy(lhs);
     matrix_destroy(rhs);
