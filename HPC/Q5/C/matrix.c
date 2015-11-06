@@ -4,30 +4,25 @@
 Matrix* matrix_create(size_t N) {
     Matrix* mat = calloc(1, sizeof(Matrix));
     mat->N = N;
-    mat->rows = calloc(N, sizeof(double*));
-    for (size_t row = 0; row < N; row++) {
-        mat->rows[row] = calloc(N, sizeof(double));
-    }
+    mat->data = calloc(N*N, sizeof(double));
     matrix_fill_rand(mat);
     return mat;
 }
 
 // Free memory from the matrix.
 void matrix_destroy(Matrix* mat) {
-    for (size_t row = 0; row < mat->N; row++) {
-        free(mat->rows[row]);
-    }
-    free(mat->rows);
+    free(mat->data);
     free(mat);
 }
 
 // Print out a matrix.
 void matrix_print(Matrix* mat) {
     printf("   %lux%lu\n", mat->N, mat->N);
-    for (size_t row = 0; row < mat->N; row++) {
+    size_t N2 = mat->N * mat->N;
+    for (size_t row = 0; row < N2; row += mat->N) {
         printf("%lu:", row+1);
         for (size_t col = 0; col < mat->N; col++) {
-            printf("\t%lf", mat->rows[row][col]);
+            printf("\t%lf", mat->data[row+col]);
         }
         printf("\n");
     }
@@ -35,10 +30,11 @@ void matrix_print(Matrix* mat) {
 
 // Fill a Matrix with random double-precision floats.
 void matrix_fill_rand(Matrix* mat) {
-    for (size_t row = 0; row < mat->N; row++) {
+    size_t N2 = mat->N * mat->N;
+    for (size_t row = 0; row < N2; row += mat->N) {
         for (size_t col = 0; col < mat->N; col++) {
             // Set element of matrix to random double between 0 and 100.
-            mat->rows[row][col] = drand48()*100;
+            mat->data[row+col] = drand48()*100;
         }
     }
 }
@@ -46,10 +42,10 @@ void matrix_fill_rand(Matrix* mat) {
 // See if each element of the matrices are equal to within tol.
 bool matrix_equals(const Matrix* lhs, const Matrix* rhs, double tol) {
     // Assumes equally sized square matrices.
-    size_t N = lhs->N;
-    for (size_t row = 0; row < N; row++) {
-        for (size_t col = 0; col < N; col++) {
-            if (fabs(lhs->rows[row][col] - rhs->rows[row][col]) > tol) {
+    size_t N2 = lhs->N * lhs->N;
+    for (size_t row = 0; row < N2; row += lhs->N) {
+        for (size_t col = 0; col < lhs->N; col++) {
+            if (fabs(lhs->data[row+col] - rhs->data[row+col]) > tol) {
                 return false;
             }
         }
@@ -60,41 +56,57 @@ bool matrix_equals(const Matrix* lhs, const Matrix* rhs, double tol) {
 
 // Zeros each element of a matrix.
 void matrix_zero(Matrix* mat) {
-    for (size_t row = 0; row < mat->N; row++) {
+    size_t N2 = mat->N * mat->N;
+    for (size_t row = 0; row < N2; row += mat->N) {
         for (size_t col = 0; col < mat->N; col++) {
-            mat->rows[row][col] = 0.0;
+            mat->data[row+col] = 0.0;
         }
     }
 }
 
 void matrix_multiply_stdf77(const Matrix* lhs, const Matrix* rhs, Matrix* res) {
     // Assumes equally sized square matrices.
-    size_t N = lhs->N;
-    for (size_t row = 0; row < N; row++) {
-        for (size_t col = 0; col < N; col++) {
+    size_t N2 = lhs->N * lhs->N;
+    // Increase row by lhs->N each loop so a multiplication isn't needed in the
+    // loop.
+    for (size_t row = 0; row < N2; row += lhs->N) {
+        for (size_t col = 0; col < lhs->N; col++) {
             double temp = 0.0;
-            for (size_t inner = 0; inner < N; inner++) {
-                temp += lhs->rows[row][inner] * rhs->rows[inner][col];
+            for (size_t inner = 0; inner < lhs->N; inner++) {
+                // inner*rhs->N is needed because inner increases by one but the
+                // row needs to be increased by rhs->N.
+                temp += lhs->data[row+inner] * rhs->data[inner*rhs->N + col];
             }
-            res->rows[row][col] = temp;
+            res->data[row+col] = temp;
         }
     }
 }
 
 void matrix_multiply_fastf77(const Matrix* lhs, const Matrix* rhs, Matrix* res) {
     // Assumes equally sized square matrices.
-    size_t N = lhs->N;
+    size_t N2 = lhs->N * lhs->N;
+    // Algorithm assumes that res starts out zeroed but we can't guarantee that
+    // it is called as such.
     matrix_zero(res);
-    for (size_t row = 0; row < N; row++) {
-        for (size_t inner = 0; inner < N; inner++) {
-            double temp = lhs->rows[row][inner];
-            for (size_t col = 0; col < N; col++) {
-                res->rows[row][col] += rhs->rows[inner][col]*temp;
+    for (size_t row = 0; row < N2; row += lhs->N) {
+        for (size_t inner = 0; inner < lhs->N; inner++) {
+            double temp = lhs->data[row+inner];
+            for (size_t col = 0; col < lhs->N; col++) {
+                res->data[row+col] += rhs->data[inner*rhs->N + col]*temp;
             }
         }
     }
 }
 
 void matrix_multiply_blas(const Matrix* lhs, const Matrix* rhs, Matrix* res) {
-    printf("%p %p %p\n", lhs, rhs, res);
+    cblas_dgemm(
+        CblasRowMajor,
+        CblasNoTrans, CblasNoTrans,
+        (blasint)lhs->N, (blasint)rhs->N, (blasint)rhs->N,
+        1.0,
+        lhs->data, (blasint)lhs->N,
+        rhs->data, (blasint)rhs->N,
+        0.0,
+        res->data, (blasint)res->N
+    );
 }

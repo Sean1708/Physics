@@ -5,10 +5,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <cblas.h>
 
 typedef struct {
-    // Stored in row-major order so accessed with [row][column].
-    double** rows;
+    // Stored in row-major order so accessed with [row*N + column].
+    // Stored as double* rather than double** for interoperability with BLAS.
+    double* data;
     // Number of rows of the square matrix (and therefore also number of columns).
     size_t N;
 } Matrix;

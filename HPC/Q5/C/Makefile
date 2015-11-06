@@ -1,4 +1,4 @@
-CFLAGS = -Weverything --std=c11
+CFLAGS = -Weverything --std=c11 -lblas
 
 debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter -O0
 debug: all
