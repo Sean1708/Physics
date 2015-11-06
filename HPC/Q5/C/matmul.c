@@ -35,7 +35,7 @@ void check_matrix_multiplication(size_t N, double tol);
 //
 //     Times the three algorithms for NxN matrices of:
 //
-//         N = {100, 128, 250, 256, 500, 512, 1000, 1024}
+//         N = {100, 128, 250, 256, 500, 511, 512, 513, 1000, 1024}
 //
 //     Each algorithm is timed 10 times and an average is taken.
 //
@@ -58,9 +58,9 @@ int main(int argc, char* argv[]) {
     // Seed once for entire program.
     srand48((long)time(NULL));
 
-    if (argc <= 1) {  // Time with N={100,128,250,256,500,512,1000,1024}, 10 times each.
+    if (argc <= 1) {
         time_multiple_matrices();
-    } else if (argc == 2) {  // Time with given N.
+    } else if (argc == 2) {
         // Convert first parameter to size_t.
         char* N_str = argv[1];
         char* N_end = N_str;
@@ -167,7 +167,7 @@ void print_timings(Timings results, size_t N) {
 }
 
 void time_multiple_matrices() {
-    size_t Ns[] = {100, 128, 250, 256, 500, 512, 1000, 1024};
+    size_t Ns[] = {100, 128, 250, 256, 500, 511, 512, 513, 1000, 1024};
     for (size_t i = 0; i < (size_t)(sizeof(Ns)/sizeof(Ns[0])); i++) {
         Timings results = time_single_matrix(Ns[i]);
         print_timings(results, Ns[i]);
