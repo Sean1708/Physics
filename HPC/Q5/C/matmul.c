@@ -23,7 +23,6 @@ void time_multiple_matrices(void);
 void check_matrix_multiplication(size_t N, double tol);
 
 
-// TODO: make all %ld into %lu and change longs to unsigned longs
 // $ matmul
 //
 //     Times the three algorithms for NxN matrices of:
@@ -51,11 +50,10 @@ int main(int argc, char* argv[]) {
     // Seed once for entire program.
     srand48((long)time(NULL));
 
-    if (argc <= 1) {
-        // Time with N={100,128,250,256,500,512,1000,1024}, 10 times each.
+    if (argc <= 1) {  // Time with N={100,128,250,256,500,512,1000,1024}, 10 times each.
         time_multiple_matrices();
-    } else if (argc == 2) {
-        // Time with given N.
+    } else if (argc == 2) {  // Time with given N.
+        // Convert first parameter to size_t.
         char* N_str = argv[1];
         char* N_end = N_str;
         long long_N = strtol(N_str, &N_end, 10);
@@ -72,6 +70,7 @@ int main(int argc, char* argv[]) {
         Timings results = time_single_matrix(N);
         print_timings(results, N);
     } else {
+        // Convert first parameter to size_t.
         char* N_str = argv[1];
         char* N_end = N_str;
         long long_N = strtol(N_str, &N_end, 10);
@@ -85,6 +84,7 @@ int main(int argc, char* argv[]) {
         }
         size_t N = (size_t)long_N;
 
+        // Convert second parameter to double.
         char* tol_str = argv[2];
         char* tol_end = tol_str;
         double tol = fabs(strtod(tol_str, &tol_end));
@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
 //
 // Each method is timed ten times and an average taken.
 Timings time_single_matrix(size_t N) {
-    printf("Timing %ldx%ld matrix...\n", (long)N, (long)N);
+    printf("Timing %lux%lu matrix...\n", (unsigned long)N, (unsigned long)N);
     Timings results = {0, 0, 0};
     Matrix* lhs = matrix_create(N);
     Matrix* rhs = matrix_create(N);
@@ -115,10 +115,11 @@ Timings time_single_matrix(size_t N) {
     clock_t sum = 0;
     // Standard F77
     for (int _i = 0; _i < 10; _i++) {
-        start = clock();
+        start = clock();  // Do this each loop to avoid overhead from loop itself.
 	    matrix_multiply_stdf77(lhs, rhs, res);
-        sum += clock() - start;
+        sum += clock() - start;  // Sum the time taken for 10 loops.
     }
+    // Average the time taken per loop.
     results.stdf77 = sum/(clock_t)10;
 
     // Fast F77

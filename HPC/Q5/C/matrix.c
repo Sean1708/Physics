@@ -17,10 +17,11 @@ void matrix_destroy(Matrix* mat) {
 
 // Print out a matrix.
 void matrix_print(Matrix* mat) {
-    printf("   %lux%lu\n", mat->N, mat->N);
+    // Convert to unsigned long for machines on which size_t is int.
+    printf("   %lux%lu\n", (unsigned long)mat->N, (unsigned long)mat->N);
     size_t N2 = mat->N * mat->N;
     for (size_t row = 0; row < N2; row += mat->N) {
-        printf("%lu:", row+1);
+        printf("%lu:", (unsigned long)row+1);
         for (size_t col = 0; col < mat->N; col++) {
             printf("\t%lf", mat->data[row+col]);
         }
@@ -99,6 +100,8 @@ void matrix_multiply_fastf77(const Matrix* lhs, const Matrix* rhs, Matrix* res) 
 }
 
 void matrix_multiply_blas(const Matrix* lhs, const Matrix* rhs, Matrix* res) {
+    // The casts here will throw away precision when size_t is long  but since
+    // the matrix sizes are small this shouldn't matter.
     cblas_dgemm(
         CblasRowMajor,
         CblasNoTrans, CblasNoTrans,
