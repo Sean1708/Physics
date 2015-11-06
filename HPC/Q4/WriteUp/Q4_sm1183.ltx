@@ -2,6 +2,7 @@
 
 \usepackage[UKenglish]{babel}
 \usepackage{graphicx}
+\usepackage{tabu}
 
 \renewcommand{\familydefault}{\sfdefault}
 
@@ -13,60 +14,78 @@
 
 The \texttt{simple\_md.c} program was compiled with no optimisations and timed
 five times with the C-Shell \texttt{time} command, the timings were:
-\begin{verbatim}
-68.515u 0.178s 1:08.83 99.7%    0+0k 0+3io 0pf+0w
-69.940u 0.151s 1:10.18 99.8%    0+0k 0+4io 0pf+0w
-68.186u 0.105s 1:08.34 99.9%    0+0k 0+5io 0pf+0w
-69.129u 0.156s 1:09.39 99.8%    0+0k 0+4io 0pf+0w
-64.415u 0.023s 1:04.44 99.9%    0+0k 0+3io 0pf+0w
-\end{verbatim}
+
+\begin{tabu} to \linewidth {llll}
+    User Time (s) & System Time (s) & Elapsed Time (s) & CPU Usage \\
+    \hline
+    68.515 & 0.178 & 68.83 & 99.7\% \\
+    69.940u & 0.151s & 70.18 & 99.8\% \\
+    68.186u & 0.105s & 68.34 & 99.9\% \\
+    69.129u & 0.156s & 69.39 & 99.8\% \\
+    64.415u & 0.023s & 64.44 & 99.9\% \\
+\end{tabu}
+
 and the results were:
-\begin{verbatim}
-PE    KE    Error
-49854482.95817039161920547485    0.00000000000000000000    0.00000000000000000000
-49854482.95817039161920547485    0.00243672236278765072    0.00000000004887664439
-\end{verbatim}
+
+\begin{tabu} to \linewidth {lll}
+    PE & KE & Error \\
+    \hline
+    49854482.95817039161920547485 & 0.00000000000000000000 & 0.00000000000000000000 \\
+    49854482.95817039161920547485 & 0.00243672236278765072 & 0.00000000004887664439 \\
+\end{tabu}
 
 The same was done with compiler optimisations on:
-\begin{verbatim}
-12.341u 0.013s 0:12.36 99.9%    0+0k 0+1io 0pf+0w
-12.396u 0.012s 0:12.41 99.9%    0+0k 0+4io 0pf+0w
-11.978u 0.008s 0:11.99 99.8%    0+0k 0+1io 0pf+0w
-12.038u 0.006s 0:12.04 99.9%    0+0k 0+4io 0pf+0w
-12.068u 0.007s 0:12.08 99.8%    0+0k 0+1io 0pf+0w
-PE    KE    Error
-49854482.95817039161920547485    0.00000000000000000000    0.00000000000000000000
-49854482.95817039161920547485    0.00243672236278765072    0.00000000004887664439
-\end{verbatim}
 
-The optimised version runs in about a sixth of the time and often uses fewer
-blocks of IO\@. Both versions of the program have almost complete CPU utilisation
-so the speed-ups are due to optimisations in the code (rather than other a
-smaller load on the CPU). Both versions also gave identical results.
+\begin{tabu} to \linewidth {llll}
+    User Time (s) & System Time (s) & Elapsed Time (s) & CPU Usage \\
+    \hline
+    12.341 & 0.013 & 12.36 & 99.9\% \\
+    12.396 & 0.012 & 12.41 & 99.9\% \\
+    11.978 & 0.008 & 11.99 & 99.8\% \\
+    12.038 & 0.006 & 12.04 & 99.9\% \\
+    12.068 & 0.007 & 12.08 & 99.8\% \\
+\end{tabu}
 
-Running \texttt{gprof} on the unoptimised version showed that \~60\% of the
+\begin{tabu} to \linewidth {lll}
+    PE & KE & Error \\
+    \hline
+    49854482.95817039161920547485 & 0.00000000000000000000 & 0.00000000000000000000 \\
+    49854482.95817039161920547485 & 0.00243672236278765072 & 0.00000000004887664439 \\
+\end{tabu}
+
+The optimised version runs in about a sixth of the time. Both versions of the
+program have almost complete CPU utilisation so the speed-ups are due to
+optimisations in the code (rather than other a smaller load on the CPU). Both
+versions also gave identical results.
+
+Running \texttt{gprof} on the unoptimised version showed that \sim60\% of the
 runtime was spent in the \texttt{compute()} function, of this over half the
 runtime was spent in \texttt{dv()} and \texttt{v()}. \texttt{v()} was changed to
 avoid calling \texttt{pow()} as follows:
+
 \begin{verbatim}
 double v(double x){
   double sin_min = sin(min(x, pi_2));
   return sin_min*sin_min;
 }
 \end{verbatim}
+
 This reduced the runtime of the unoptimised version to about 65 seconds but had
 no affect on the optimised version. \texttt{dv()} was then changed to use an
 addition instead of multiplication by two:
+
 \begin{verbatim}
 double dv(double x){
   double sin_cos = sin(min(x,pi_2))*cos(min(x,pi_2));
   return sin_cos+sin_cos;
 }
 \end{verbatim}
+
 This had little effect on the runtime, however it was noticed that \texttt{min()}
 was taking up 25\% of the total runtime and accounted for the majority of the time
 spent in \texttt{dv()} so \texttt{dv()} was changed to only call \texttt{min()}
 once:
+
 \begin{verbatim}
 double dv(double x){
   double x_pi_min = min(x,pi_2);
@@ -74,19 +93,23 @@ double dv(double x){
   return sin_cos+sin_cos;
 }
 \end{verbatim}
+
 This reduced the runtime of the unoptimised version to about 58 seconds but
 again had no effect on the optimised version. The results after these changes
 were unchanged:
-\begin{verbatim}
-PE    KE    Error
-49854482.95817039161920547485    0.00000000000000000000    0.00000000000000000000
-49854482.95817039161920547485    0.00243672236278765072    0.00000000004887664439
-\end{verbatim}
+
+\begin{tabu} to \linewidth {lll}
+    PE & KE & Error \\
+    \hline
+    49854482.95817039161920547485 & 0.00000000000000000000 & 0.00000000000000000000 \\
+    49854482.95817039161920547485 & 0.00243672236278765072 & 0.00000000004887664439 \\
+\end{tabu}
 
 The program was profiled again after these changes. The amount of time spent in
 \texttt{min()} had been reduced to about 18\% but \texttt{compute()} still
 dominated the runtime (about 68\%). Within compute the two following loops were
 independent of eachother:
+
 \begin{verbatim}
 /* d2 as the squared distance between the particles */
 for(k=0 ; k < ndim ; k++)
@@ -101,7 +124,9 @@ for(k=0 ; k < ndim ; k++)
 }
 d = sqrt(d2);
 \end{verbatim}
+
 so they were merged into one loop with no change in results:
+
 \begin{verbatim}
 /* d2 as the squared distance between the particles */
 d2 = 0;
@@ -116,6 +141,7 @@ d = sqrt(d2);
 Similarly the loop to calculate the kinetic energy was put into the loop which
 initialises \texttt{rij} since \texttt{vel} is not updated anywhere in the
 function:
+
 \begin{verbatim}
 for(k=0 ; k < ndim ; k++)
 {
@@ -125,10 +151,12 @@ for(k=0 ; k < ndim ; k++)
     KE = KE + vel[i][k]*vel[i][k];
 }
 \end{verbatim}
+
 This had no effect on the runtime of either version.
 
 The \texttt{dv(d)/d} calculation was being run three times for every inner loop,
 so this was moved outside the inner loop from:
+
 \begin{verbatim}
 /* Update the force on particle i*/
 for(k=0 ; k < ndim ; k++)
@@ -136,7 +164,9 @@ for(k=0 ; k < ndim ; k++)
     force[i][k] = force[i][k] - rij[k]*dv(d)/d;
 }
 \end{verbatim}
+
 To:
+
 \begin{verbatim}
 double dvd = dv(d)/d;
 /* Update the force on particle i*/
@@ -145,11 +175,13 @@ for(k=0 ; k < ndim ; k++)
     force[i][k] = force[i][k] - rij[k]*dvd;
 }
 \end{verbatim}
+
 The unoptimised version now runs in about 30 seconds but there was no change in
 the runtime of the optimised version.
 
 The value that \texttt{k} takes in the inner-most loops of \texttt{compute()} is
 always 3 so these loops were unrolled from:
+
 \begin{verbatim}
 d2 = 0;
 for(k=0 ; k < ndim ; k++)
@@ -159,14 +191,18 @@ for(k=0 ; k < ndim ; k++)
 }
 d = sqrt(d2);
 \end{verbatim}
+
 and
+
 \begin{verbatim}
 for(k=0 ; k < ndim ; k++)
 {
     force[i][k] = force[i][k] - rij[k]*dvd;
 }
 \end{verbatim}
+
 To:
+
 \begin{verbatim}
 d2 = 0;
 rij[0] = pos[i][0] - pos[j][0];
@@ -177,11 +213,52 @@ rij[2] = pos[i][2] - pos[j][2];
 d2 += rij[2]*rij[2];
 d = sqrt(d2);
 \end{verbatim}
+
 and
+
 \begin{verbatim}
 force[i][0] = force[i][0] - rij[0]*dvd;
 force[i][1] = force[i][1] - rij[1]*dvd;
 force[i][2] = force[i][2] - rij[2]*dvd;
 \end{verbatim}
+
+At this point the unoptimised version ran in the following times:
+
+\begin{tabu} to \linewidth {llll}
+    User Time (s) & System Time (s) & Elapsed Time (s) & CPU Usage \\
+    \hline
+    27.190 & 0.078 & 27.34 & 99.7\% \\
+    29.148 & 0.083 & 29.29 & 99.7\%	\\
+    28.075 & 0.083 & 28.21 & 99.7\%	\\
+    28.378 & 0.078 & 28.50 & 99.7\%	\\
+    28.356 & 0.093 & 28.51 & 99.7\%	\\
+\end{tabu}
+
+and the optimised version:
+
+\begin{tabu} to \linewidth {llll}
+    User Time (s) & System Time (s) & Elapsed Time (s) & CPU Usage \\
+    \hline
+    12.222 & 0.024 & 12.26 & 99.8\%	\\
+    11.908 & 0.012 & 11.93 & 99.8\%	\\
+    12.412 & 0.028 & 12.45 & 99.8\%	\\
+    11.715 & 0.006 & 11.72 & 99.9\% \\
+    11.640 & 0.005 & 11.64 & 100.0\% \\
+\end{tabu}
+
+The results for both versions were:
+
+\begin{tabu} to \linewidth {lll}
+    PE & KE & Error \\
+    \hline
+    49854482.95817039161920547485 & 0.00000000000000000000 & 0.00000000000000000000 \\
+    49854482.95817039161920547485 & 0.00243672236278765072 & 0.00000000004887664439 \\
+\end{tabu}
+
+The manual optimisations made no significant difference to the runtime of the
+optimised version showing that the compiler had already made all those
+optimisations. It is likely that there was some sort of algorithmic optimisation
+that could be made to speed the code up significantly but this could not be
+found.
 
 \end{document}
