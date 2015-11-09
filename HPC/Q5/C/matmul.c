@@ -128,7 +128,7 @@ Timings time_single_matrix(size_t N) {
     // Standard F77
     for (int _i = 0; _i < 10; _i++) {
         start = clock();  // Do this each loop to avoid overhead from loop itself.
-	    matrix_multiply_stdf77(lhs, rhs, res);
+        matrix_multiply_stdf77(lhs, rhs, res);
         sum += clock() - start;  // Sum the time taken for 10 loops.
     }
     // Average the time taken per loop.
