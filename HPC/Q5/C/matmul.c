@@ -165,9 +165,11 @@ Timings time_single_matrix(size_t N) {
 
 void print_timings(Timings results, size_t N) {
     printf("For a %lux%lu matrix the algorithms took:\n", (unsigned long)N, (unsigned long)N);
-    printf("\t Std F77: %lfs\n", (double)results.stdf77/CLOCKS_PER_SEC);
-    printf("\tFast F77: %lfs\n", (double)results.fastf77/CLOCKS_PER_SEC);
-    printf("\t    BLAS: %lfs\n", (double)results.blas/CLOCKS_PER_SEC);
+    // For simpler parsing of the output.
+    printf("\t              Rows: %lu\n", (unsigned long)N);
+    printf("\t Std F77 (seconds): %lf\n", (double)results.stdf77/CLOCKS_PER_SEC);
+    printf("\tFast F77 (seconds): %lf\n", (double)results.fastf77/CLOCKS_PER_SEC);
+    printf("\t    BLAS (seconds): %lf\n", (double)results.blas/CLOCKS_PER_SEC);
 }
 
 void time_multiple_matrices() {
