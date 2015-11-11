@@ -39,7 +39,7 @@ void check_matrix_multiplication(size_t N, double tol);
 //
 //     Times the three algorithms for NxN matrices of:
 //
-//         N = {100, 127, 128, 129, 250, 255, 256, 257, 500, 511, 512, 513, 1000, 1024}
+//         N = {100, 123, 127, 128, 129, 133, 246, 250, 253, 256, 259, 266, 500, 512, 1000, 1024};
 //
 //     Each algorithm is timed 10 times and an average is taken.
 //
@@ -173,7 +173,7 @@ void print_timings(Timings results, size_t N) {
 }
 
 void time_multiple_matrices() {
-    size_t Ns[] = {100, 127, 128, 129, 250, 255, 256, 257, 500, 511, 512, 513, 1000, 1024};
+    size_t Ns[] = {100, 123, 127, 128, 129, 133, 246, 250, 253, 256, 259, 266, 500, 512, 1000, 1024};
     for (size_t i = 0; i < (size_t)(sizeof(Ns)/sizeof(Ns[0])); i++) {
         Timings results = time_single_matrix(Ns[i]);
         print_timings(results, Ns[i]);
