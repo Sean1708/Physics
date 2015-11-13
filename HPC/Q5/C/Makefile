@@ -1,17 +1,21 @@
-CFLAGS = -Weverything --std=c11 -lblas
-LDFLAGS ?= -L/usr/local/opt/openblas/lib
-CPPFLAGS ?= -I/usr/local/opt/openblas/include
+LDFLAGS = -lblas
 
-debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter -O0
-debug: all
 
-release: CFLAGS += -DNDEBUG -O3
-release: all
+macbook: CFLAGS += -Weverything --std=c11 -O3
+macbook: LDFLAGS ?= -L/usr/local/opt/openblas/lib
+macbook: CPPFLAGS ?= -I/usr/local/opt/openblas/include
+macbook: all
+
+jorvik: CFLAGS += -Wall -Wextra -pedantic -std=c99 -O3
+jorvik: all
 
 all: matmul
 
-matmul: matmul.c matrix.c
+matmul: matmul.o matrix.o
+	$(CC) matmul.o matrix.o $(LDFLAGS) -o matmul
+
 
 .PHONY: clean
 clean:
 	rm -rf matmul matmul.dSYM
+	rm -rf *.o

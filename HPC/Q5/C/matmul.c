@@ -14,13 +14,16 @@
 //   clang --std=c11 -lblas -O3  matmul.c matrix.c   -o matmul
 // BLAS Version:
 //   OpenBLAS 0.2.15
+// 
+// Can be compiled on Jorvik using:
+//   gcc -std=c99 -O3  matmul.c matrix.c  -lblas   -o matmul
+#include "matrix.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
 #include <math.h>
-
-#include "matrix.h"
 
 
 typedef struct {

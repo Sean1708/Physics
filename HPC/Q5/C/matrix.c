@@ -100,16 +100,17 @@ void matrix_multiply_fastf77(const Matrix* lhs, const Matrix* rhs, Matrix* res) 
 }
 
 void matrix_multiply_blas(const Matrix* lhs, const Matrix* rhs, Matrix* res) {
-    // The casts here will throw away precision when size_t is long  but since
-    // the matrix sizes are small this shouldn't matter.
+    // The casts here will throw away precision when size_t is long but CBLAS
+    // on Jorvik doesn't typedef blasint. Since the matrix sizes are small this
+    // shouldn't matter.
     cblas_dgemm(
         CblasRowMajor,
         CblasNoTrans, CblasNoTrans,
-        (blasint)lhs->N, (blasint)rhs->N, (blasint)rhs->N,
+        (int)lhs->N, (int)rhs->N, (int)rhs->N,
         1.0,
-        lhs->data, (blasint)lhs->N,
-        rhs->data, (blasint)rhs->N,
+        lhs->data, (int)lhs->N,
+        rhs->data, (int)rhs->N,
         0.0,
-        res->data, (blasint)res->N
+        res->data, (int)res->N
     );
 }

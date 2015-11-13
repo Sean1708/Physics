@@ -1,6 +1,8 @@
 #ifndef matrix_h
 #define matrix_h
 
+#define _XOPEN_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
