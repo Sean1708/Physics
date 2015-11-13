@@ -1,6 +1,5 @@
 LDFLAGS = -lblas
 
-
 macbook: CFLAGS += -Weverything -Wno-reserved-id-macro --std=c11 -O3
 macbook: LDFLAGS ?= -L/usr/local/opt/openblas/lib
 macbook: CPPFLAGS ?= -I/usr/local/opt/openblas/include
