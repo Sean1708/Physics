@@ -19,10 +19,11 @@ release: all
 
 all: $name
 
-$name: ${name}.c
+$name: ${name}.o
 
 .PHONY: clean
 clean:
+	rm -rf *.o
 	rm -rf $name ${name}.dSYM" > 'C/Makefile'
 echo "$name" > 'C/.gitignore'
 echo "#include <stdio.h>
