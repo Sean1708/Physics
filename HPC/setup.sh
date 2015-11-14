@@ -11,7 +11,7 @@ cd "Q$question"
 mkdir 'C'
 echo "CFLAGS = -Weverything --std=c11
 
-debug: CFLAGS += -g -DDEBUG -Werror -Wno-unused-parameter -O0
+debug: CFLAGS += -g -Werror -Wno-unused-parameter -O0
 debug: all
 
 release: CFLAGS += -DNDEBUG -O3
