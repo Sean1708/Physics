@@ -37,6 +37,7 @@ void time_kahan(size_t N) {
 
 double kahan(size_t N, double* A, double* B) {
     double sum = 0;
+    #pragma omp parallel for shared(A, B) reduction(+:sum)
     for (size_t i = 0; i < N; i++) {
         A[i] = (double)i;
         B[i] = A[i]*A[i];
