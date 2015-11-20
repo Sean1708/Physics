@@ -1,3 +1,7 @@
+// Compiled on:
+//     gcc 4.8.3
+// With:
+//     gcc -O0 -fopenmp openmp.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
