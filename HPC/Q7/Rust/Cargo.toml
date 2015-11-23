@@ -1,0 +1,6 @@
+[package]
+name = "heatbath"
+version = "0.1.0"
+authors = ["Sean Marshallsay <srm.1708@gmail.com>"]
+
+[dependencies]
