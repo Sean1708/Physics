@@ -1,18 +1,23 @@
-CFLAGS = -Weverything --std=c11
+CFLAGS = -Weverything --std=c11 -O0 -g -Wno-reserved-id-macro
 
-debug: CFLAGS += -g -Werror -Wno-unused-parameter -O0
-debug: all
+.PHONY: mpi
+mpi: CC = mpicc
+mpi: heatbath-parallel
 
-release: CFLAGS += -DNDEBUG -O3
-release: all
+.PHONY: serial
+serial: heatbath-serial
 
-all: heatbath
+heatbath-parallel: heatbath-parallel.o matrix.o
 
-heatbath: heatbath.o matrix.o
+heatbath-serial: heatbath-serial.o matrix.o
 
 matrix.o: matrix.c matrix.h
 
+.PHONY: run
+run:
+	mpirun heatbath-parallel
+
 .PHONY: clean
 clean:
-	rm -rf *.o
-	rm -rf heatbath heatbath.dSYM
+	rm -rf heatbath-serial heatbath-parallel
+	rm -rf *.dSYM *.o

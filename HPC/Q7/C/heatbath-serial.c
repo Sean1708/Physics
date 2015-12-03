@@ -22,9 +22,7 @@ int main() {
     matrix_set_coord(current_state, 4, 6, 7.2);
     matrix_set_coord(current_state, 7, 2.5, -1.2);
 
-    matrix_print(current_state);
-
-    while (!matrix_equals(previous_state, current_state, TOLERANCE)) {
+    do {
         matrix_copy(current_state, previous_state);
         for (int row = 0; row < current_state->rows; row++) {
             for (int col = 0; col < current_state->cols; col++) {
@@ -36,19 +34,18 @@ int main() {
                     // Don't change the heat sources.
                     continue;
                 } else {
-                    double self = matrix_get(current_state, row, col);
-                    double up = matrix_get(current_state, row-1, col);
-                    double down = matrix_get(current_state, row+1, col);
-                    double left = matrix_get(current_state, row, col-1);
-                    double right = matrix_get(current_state, row, col+1);
+                    double self = matrix_get(previous_state, row, col);
+                    double up = matrix_get(previous_state, row-1, col);
+                    double down = matrix_get(previous_state, row+1, col);
+                    double left = matrix_get(previous_state, row, col-1);
+                    double right = matrix_get(previous_state, row, col+1);
                     double average = (self + up + down + left + right)/(double)5;
-                    current_state->data[row][col] = average;
+                    current_state->data[row*cols + col] = average;
                 }
             }
         }
-    }
+    } while (!matrix_equals(previous_state, current_state, TOLERANCE));
 
-    matrix_print(current_state);
     fprintf(stderr, "(5.5, 5.5) = %.15lf\n", matrix_get_coord(current_state, 5.5, 5.5));
 
     matrix_destroy(previous_state);
@@ -62,7 +59,8 @@ double matrix_get(Matrix* grid, int row, int col) {
         // Heatbath of temperature 0K surrounds the grid.
         return 0;
     } else {
-        return grid->data[row][col];
+        int ncols = grid->cols;
+        return grid->data[row*ncols + col];
     }
 }
 
@@ -80,5 +78,6 @@ double matrix_get_coord(Matrix* grid, double row, double col) {
 // Set an element of the matrix from a coordinate.
 void matrix_set_coord(Matrix* grid, double row, double col, double value) {
     // Assumes row and col are in bounds.
-    grid->data[coord_to_elem(row)][coord_to_elem(col)] = value;
+    int ncols = grid->cols;
+    grid->data[coord_to_elem(row)*ncols + coord_to_elem(col)] = value;
 }

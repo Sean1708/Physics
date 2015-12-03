@@ -8,8 +8,8 @@
 #include <math.h>
 
 typedef struct {
-    // Stored in row-major order so accessed with [row][column].
-    double** data;
+    // Stored in row-major order so accessed with [row*num_cols + column].
+    double* data;
     int rows;
     int cols;
 } Matrix;
