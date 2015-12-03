@@ -7,11 +7,11 @@ mpi: heatbath-parallel
 .PHONY: serial
 serial: heatbath-serial
 
-heatbath-parallel: heatbath-parallel.o matrix.o
+heatbath-parallel: heatbath-parallel.o grid.o
 
-heatbath-serial: heatbath-serial.o matrix.o
+heatbath-serial: heatbath-serial.o grid.o
 
-matrix.o: matrix.c matrix.h
+grid.o: grid.c grid.h
 
 .PHONY: run
 run:
