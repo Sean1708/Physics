@@ -1,5 +1,8 @@
 CFLAGS = -Weverything --std=c11 -O0 -g -Wno-reserved-id-macro
 
+.PHONY: all
+all: mpi serial
+
 .PHONY: mpi
 mpi: CC = mpicc
 mpi: heatbath-parallel
