@@ -10,7 +10,6 @@ void grid_set_coord(Grid* grid, double row, double col, double value);
 const static double TOLERANCE = 0.0000000001;
 const static double COORD_TO_ELEM_FACTOR = 10;
 
-// int main(int argc, char* argv[]) {
 int main() {
     int rows = 100;
     int cols = 100;
@@ -45,7 +44,7 @@ int main() {
         }
     } while (!grid_cmp(previous_state, current_state, TOLERANCE));
 
-    fprintf(stderr, "(5.5, 5.5) = %.15lf\n", grid_get_coord(current_state, 5.5, 5.5));
+    fprintf(stderr, "(5.5, 5.5) = %lf\n", grid_get_coord(current_state, 5.5, 5.5));
 
     grid_destroy(previous_state);
     grid_destroy(current_state);
