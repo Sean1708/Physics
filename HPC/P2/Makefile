@@ -9,5 +9,5 @@ ping: ping.o
 
 .PHONY: clean
 clean:
-	rm -rf hello
+	rm -rf hello ping
 	rm -rf *.dSYM *.o run_mpi.sh.*

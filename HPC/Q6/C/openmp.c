@@ -1,7 +1,12 @@
+// Compiled on:
+//     gcc 4.8.3
+// With:
+//     gcc -O0 -fopenmp openmp.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <omp.h>
 
 void time_kahan(size_t N);
 double kahan(size_t N, double* A, double* B);
@@ -21,13 +26,13 @@ void time_kahan(size_t N) {
     double* A = calloc(N, sizeof(double));
     double* B = calloc(N, sizeof(double));
 
-    clock_t start = clock();
+    double start = omp_get_wtime();
     double sum = kahan(N, A, B);
-    clock_t stop = clock();
-    double diff = (double)(stop - start)/CLOCKS_PER_SEC;
+    double stop = omp_get_wtime();
+    double diff = (stop - start);
 
     printf("       N: %lu\n", (unsigned long)N);
-    printf("     sum: %lf\n", sum);
+    printf("     sum: %le\n", sum);
     printf("time (s): %lf\n", diff);
     printf("\n");
 
