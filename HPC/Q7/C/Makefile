@@ -1,4 +1,4 @@
-CFLAGS = -Weverything --std=c11 -O0 -g -Wno-reserved-id-macro
+CFLAGS = -Wall -Wextra -pedantic -std=c99 -O3
 
 .PHONY: all
 all: mpi serial
@@ -16,9 +16,6 @@ heatbath-serial: heatbath-serial.o grid.o
 
 grid.o: grid.c grid.h
 
-.PHONY: run
-run:
-	mpirun heatbath-parallel
 
 .PHONY: clean
 clean:
