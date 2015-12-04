@@ -19,8 +19,8 @@ NUM_CORES=6
 #note: binary stored locally on each node
 EXEC=$PWD/heatbath-parallel
 
-mpirun -np 1 $EXEC $1
-mpirun -np 2 $EXEC $1
-mpirun -np 4 $EXEC $1
-mpirun -np 5 $EXEC $1
-mpirun -np 10 $EXEC $1
+time mpirun -np 1 $EXEC $1
+time mpirun -np 2 $EXEC $1
+time mpirun -np 4 $EXEC $1
+time mpirun -np 5 $EXEC $1
+time mpirun -np 10 $EXEC $1
