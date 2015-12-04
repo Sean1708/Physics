@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #specify export QSUB vars to shell script
-#$ -V -R y -q parallel.q -N run_mpi.sh
+#$ -V -R y -q parallel.q -N OpenMP
 
 #execute script from current working directory 
 #$ -cwd
