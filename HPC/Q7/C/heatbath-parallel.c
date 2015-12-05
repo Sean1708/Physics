@@ -281,7 +281,7 @@ int main(int argc, char* argv[]) {
         int full_grid_row = coord_to_elem(5.5);
         int row = full_grid_row - (rank*rank_rows);
         int col = coord_to_elem(5.5);
-        printf("(5.5, 5.5) = %.15lf\n", grid_get(local_current_state, row, col));
+        printf("(5.5, 5.5) = %lf\n", grid_get(local_current_state, row, col));
     }
 
     grid_destroy(local_previous_state);
