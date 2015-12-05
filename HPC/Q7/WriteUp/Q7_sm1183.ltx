@@ -2,15 +2,37 @@
 
 \usepackage[UKenglish]{babel}
 \usepackage{graphicx}
+\usepackage{ctable}
 
 \renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
-\title{Question 7: heatbath}
+\title{Question 7: Heatbath}
 \author{Sean Marshallsay: sm1183}
 \date{}
 \maketitle
 
-DO TIMINGS AND SUCH ON JORVIK!!11!!11!!!
+The program was written serially in \texttt{heatbath-serial.c}. This was timed using the bash
+\texttt{time} built-in 10 times and the average was 10.0 seconds. The value of point (5.5, 5.5) once
+the system had reached equilibrium was \(4.189211\).
+
+The program was then parallelised in \texttt{heatbath-parallel.c}. This was also timed 10 times for
+1, 2, 4, 5 and 10 processors and the averages are in table~\ref{t:parallel}. The same result
+(\(4.189211\)) was achieved.
+
+\ctable[
+    label = t:parallel,
+    cap = Timing results of using varying cores.,
+    caption = Increasing the number of cores can give over a factor of 2 speed up though using more
+        than two cores gives very little speed up.,
+    pos = ht,
+]{r|r}{}{\FL
+    Number of Cores & Time (s) \ML
+    1 & 7.3 \NN
+    2 & 3.8 \NN
+    4 & 3.5 \NN
+    5 & 3.2 \NN
+    10 & 4.7 \LL
+}
 
 \end{document}
